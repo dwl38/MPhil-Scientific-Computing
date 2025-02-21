@@ -4,9 +4,7 @@ The goal of this written assignment was to "explore the basics of machine learni
 
 This written assignment was mostly based on the following paper:
 
-```
-I. Batatia et al. (2023). A foundation model for atomistic materials chemistry. arXiv preprint, 2401.00096. 
-```
+- I. Batatia et al. (2023). A foundation model for atomistic materials chemistry. arXiv preprint, 2401.00096. 
 
 with the original intent being to recreate a showcase example from the paper using [MACE-MP-0](https://github.com/ACEsuit/mace-mp/tree/main). However, students were also given the freedom to select systems outside of the examples in the paper, and to use other foundation models if they so desired.
 
@@ -19,9 +17,7 @@ I chose to study this system due to its relatively small molecular size -- thus 
 
 Instead of MACE-MP-0, I chose to use the MACE-OFF24 'medium' model, which is described in a different paper:
 
-```
-D.P. Kovács et al. (2023). MACE-OFF23: Transferable Machine Learning Force Fields for Organic Molecules. arXiv preprint, 2312.15211.
-```
+- D.P. Kovács et al. (2023). MACE-OFF23: Transferable Machine Learning Force Fields for Organic Molecules. arXiv preprint, 2312.15211.
 
 due to the better suitability of MACE-OFF in describing organic reactions.
 

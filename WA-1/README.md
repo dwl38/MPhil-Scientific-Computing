@@ -13,13 +13,13 @@ with the original intent being to recreate a showcase example from the paper usi
 
 In my case, I have chosen to study the thermal decomposition of 1,3,5-triamino-2,4,6-trinitrobenzine (TATB), which is a high explosive with many industrial applications. In particular, when heated under ambient pressure, TATB is known to thermally decompose in a benign manner at roughly ~330&deg;C (i.e. without exploding), hence it is the preferred explosive for applications where safety against unintended detonation is required.
 
-I chose to study this system due to its relatively small molecular size -- thus keeping computational costs low -- and also for its challenging nature against conventional force-field based simulations (e.g. requiring a good model of chemical reactivity amongst organics).
+I chose to study this system due to its relatively small molecular size &ndash; thus keeping computational costs low &ndash; and also for its challenging nature against conventional force-field based simulations (e.g. requiring a good model of chemical reactivity amongst organics).
 
-Instead of MACE-MP-0, I chose to use the MACE-OFF24 'medium' model, which is described in a different paper:
+Instead of MACE-MP-0, I chose to use the [MACE-OFF24 'medium' model](https://github.com/ACEsuit/mace-off), which is described in a different paper:
 
 - D.P. Kovács et al. (2023). MACE-OFF23: Transferable Machine Learning Force Fields for Organic Molecules. arXiv preprint, 2312.15211.
 
-due to the better suitability of MACE-OFF in describing organic reactions.
+due to the better suitability of MACE-OFF in describing organic reactions. The molecular dynamics simulations were performed using [ASE v3.24.0](https://wiki.fysik.dtu.dk/ase/) interfaced with the [MACE calculator](https://github.com/ACEsuit/mace), running either Langevin dynamics (for NVT) or Nosé-Hoover-Parinello-Rahman dynamics (for NPT). 
 
 
 ---

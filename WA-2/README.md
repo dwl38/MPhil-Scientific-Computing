@@ -5,7 +5,7 @@ The goal of this written assignment was to "utilise machine learning interatomic
 This written assignment was mostly based on the following papers:
 
 - I. Batatia et al. (2023). A foundation model for atomistic materials chemistry. arXiv preprint, 2401.00096.
-- H. Kaur et al. (2025). Data-efficient fine-tuning of foundational models for first-principles quality sublimation enthalpies. Faraday Discuss., vol. 256, pg. 120--138, DOI:[10.1039/D4FD00107A](https://doi.org/10.1039/D4FD00107A).
+- H. Kaur et al. (2025). Data-efficient fine-tuning of foundational models for first-principles quality sublimation enthalpies. Faraday Discuss., vol. 256, pg. 120&ndash;138, DOI:[10.1039/D4FD00107A](https://doi.org/10.1039/D4FD00107A).
 
 A small collection of example datasets was also provided to students to select from.
 

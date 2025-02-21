@@ -1,0 +1,3 @@
+[submodule "WA-1/00-common/venv/mace"]
+	path = WA-1/00-common/venv/mace
+	url = https://github.com/ACEsuit/mace.git

@@ -1,0 +1,7 @@
+########################
+# Raw trajectory files #
+########################
+
+WA-1/01-single-molecule/*/md.traj
+WA-1/01-single-molecule/*/traj.xyz
+

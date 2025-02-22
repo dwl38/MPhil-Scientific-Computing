@@ -1,0 +1,8 @@
+MACE-MP-0 models obtained from https://github.com/ACEsuit/mace-mp/releases/tag/mace_mp_0
+
+ - MACE-MP-0 small (3,847,696 params): 2023-12-10-mace-128-L0_energy_epoch-249.model
+ - MACE-MP-0 medium (4,688,656 params): 2023-12-03-mace-128-L1_epoch-199.model
+ - MACE-MP-0 large (5,725,072 params): 2024-01-07-mace-128-L2_epoch-199.model
+
+MACE-OFF24 model obtained from https://github.com/ACEsuit/mace-off/tree/main/mace_off24
+

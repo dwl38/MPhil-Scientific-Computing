@@ -49,13 +49,15 @@ module load rhel8/default-amp              # REQUIRED - loads the basic environm
 
 #! Insert additional module load commands after this line if needed:
 
-source ../00-common/venv/bin/activate
+conda init
+source ~/.bashrc
+conda activate venv
 
 #! Full path to application executable: 
 application="python"
 
 #! Run options for the application:
-options="run.py 550 575"
+options="run.py 525 550"
 
 #! Work directory (i.e. where the job will run):
 workdir="$SLURM_SUBMIT_DIR"  # The value of SLURM_SUBMIT_DIR sets workdir to the directory

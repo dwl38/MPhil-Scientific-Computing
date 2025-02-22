@@ -49,7 +49,9 @@ module load rhel8/default-amp              # REQUIRED - loads the basic environm
 
 #! Insert additional module load commands after this line if needed:
 
-source ../00-common/venv/bin/activate
+conda init
+source ~/.bashrc
+conda activate venv
 
 #! Full path to application executable: 
 application="python"

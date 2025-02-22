@@ -12,4 +12,6 @@ WA-1/00-common/venv/*
 
 WA-1/01-single-molecule/*/md.traj
 WA-1/01-single-molecule/*/traj.xyz
+WA-1/02-three-molecules/*/md.traj
+WA-1/02-three-molecules/*/traj.xyz
 

@@ -28,8 +28,10 @@ import matplotlib.pyplot as plt
 #==================================================================================================
 # Script parameters
 
-CUTOFF_LENGTH = 1.75
+CUTOFF_LENGTH = 1.85
 CUTOFF_LENGTH_SQ = CUTOFF_LENGTH**2
+
+CONVOLUTION_WIDTH = 100
 
 MOLECULES_TO_FIND = [[[6, 6, 6, 6], r'TATB'],     # TATB, C6H6O6N6
                      [[6, 4, 5, 6], r'TATB-F1'],  # TATB-F1 (furazan intermediate), C6H4O5N6
@@ -125,6 +127,10 @@ for atoms in traj:
     list_of_compositions.append(composition)
     frame_counter += 1
 
+conv_arr = np.linspace(-2, 2, 2 * CONVOLUTION_WIDTH + 1)
+conv_arr = np.exp(-0.5 * np.square(conv_arr))
+conv_arr = conv_arr / np.sum(conv_arr)
+
 fig, axis = plt.subplots()
 fig.set_size_inches(12, 9)
 for target in MOLECULES_TO_FIND:
@@ -135,7 +141,7 @@ for target in MOLECULES_TO_FIND:
         if frame[target[1]] > 0:
             display = True
     if display:
-        axis.plot(counts, label=target[1])
+        axis.plot(np.convolve(counts, conv_arr, 'valid'), label=target[1])
 axis.set_title('Molecule counts over frame number')
 axis.set_xlabel('Frame no.')
 axis.set_ylabel('Count')

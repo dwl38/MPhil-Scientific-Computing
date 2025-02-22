@@ -19,12 +19,31 @@ Instead of MACE-MP-0, I chose to use the [MACE-OFF24 'medium' model](https://git
 
 - D.P. Kovács et al. (2023). MACE-OFF23: Transferable Machine Learning Force Fields for Organic Molecules. arXiv preprint, 2312.15211.
 
-due to the better suitability of MACE-OFF in describing organic reactions. The molecular dynamics simulations were performed using [ASE v3.24.0](https://wiki.fysik.dtu.dk/ase/) interfaced with the [MACE calculator](https://github.com/ACEsuit/mace), running either Langevin dynamics (for NVT) or Nosé-Hoover-Parinello-Rahman dynamics (for NPT). 
+due to the better suitability of MACE-OFF in describing organic reactions. The molecular dynamics simulations were performed using [ASE v3.24.0](https://wiki.fysik.dtu.dk/ase/) interfaced with the [MACE calculator](https://github.com/ACEsuit/mace), running either Langevin dynamics (for NVT) or Nosé-Hoover-Parinello-Rahman dynamics (for NpT). 
 
 
 ---
 
 The project structure is as follows:
 
-(TODO: Write this section)
+- `📁 00-common`: Common assets for all following subprojects
 
+    - `📁 geoms`: Starting molecular geometries
+
+    - `📁 mace-models`: Collection of MACE foundation models
+    
+    - `📁 venv`: Python virtual environment needed to run the following simulations (by executing the respective `run.py` scripts)
+ 
+      | ℹ️ Important |
+      |---------------|
+      | This repository does not contain the Python environment files themselves, due to large filesizes! Run the script `venv/setup.sh` to download and install the environment, and `source venv/bin/activate` to activate the environment, before running any simulations. |
+
+    - `📜 view.tcl`: Tcl script for VMD to set up view settings (of my personal preference); use as `vmd <file> -e /path/to/view.tcl`
+
+- `📁 01-single-molecule`:  A series of NVT simulations of a single TATB molecule at various temperatures
+
+- `📁 02-three-molecules`: A short series of NVT simulations of three TATB molecules in dilute gas phase (abandoned halfway)
+
+- `📁 03-crystal-rtp`: A NpT simulation of a solid TATB crystal at 300K, 1 atm for equilibration
+  
+- `📁 04-crystal-heat`: A series of NpT simulations of a solid TATB crystal at 1 atm, with increasing temperature

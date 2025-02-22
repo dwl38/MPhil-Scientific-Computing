@@ -40,6 +40,8 @@ The project structure is as follows:
 
     - `📜 view.tcl`: Tcl script for VMD to set up view settings (of my personal preference); use as `vmd <file> -e /path/to/view.tcl`
 
+    - `📜 analyze.py`: Python script for analyzing the chemical content of each frame in a trajectory, to tell if and when the TATB molecule(s) have decomposed
+
 - `📁 01-single-molecule`:  A series of NVT simulations of a single TATB molecule at various temperatures
 
 - `📁 02-three-molecules`: A short series of NVT simulations of three TATB molecules in dilute gas phase (abandoned halfway)
@@ -48,4 +50,5 @@ The project structure is as follows:
   
 - `📁 04-crystal-heat`: A series of NpT simulations of a solid TATB crystal at 1 atm, with increasing temperature
 
-
+> [!NOTE]
+> The trajectory files are not in this repository, due to their large sizes; only the simulation logs and processed results are.

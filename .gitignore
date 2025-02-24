@@ -10,12 +10,8 @@ WA-1/00-common/venv/*
 # Raw trajectory files #
 ########################
 
-WA-1/01-single-molecule/*/md.traj
-WA-1/01-single-molecule/*/traj.xyz
-WA-1/02-three-molecules/*/md.traj
-WA-1/02-three-molecules/*/traj.xyz
-WA-1/03-crystal-rtp/md.traj
-WA-1/03-crystal-rtp/traj.xyz
-WA-1/04-crystal-heat/*/md.traj
-WA-1/04-crystal-heat/*/traj.xyz
+WA-1/*/md.traj
+WA-1/*/traj.xyz
+WA-1/*/*/md.traj
+WA-1/*/*/traj.xyz
 

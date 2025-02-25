@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 CUTOFF_LENGTH = 1.85
 CUTOFF_LENGTH_SQ = CUTOFF_LENGTH**2
 
-CONVOLUTION_WIDTH = 100
+CONVOLUTION_WIDTH = 200
 
 MOLECULES_TO_FIND = [[[6, 6, 6, 6], r'TATB'],     # TATB, C6H6O6N6
                      [[6, 4, 5, 6], r'TATB-F1'],  # TATB-F1 (furazan intermediate), C6H4O5N6
@@ -56,78 +56,49 @@ if not os.path.isfile('md.traj'):
 if os.path.isfile('compositions.png'):
     os.remove('compositions.png')
 
-def count_molecules(molecule_dict, target):
-    if target[0] == 0:
-        if molecule_dict['C'] > 0:
+def count_molecules(molecule, target):
+    if np.sum(np.mod(molecule, target)) > 0:
+        return 0
+    nonzero_index = np.nonzero(target)[0][0]
+    possible_count = molecule[nonzero_index] / target[nonzero_index]
+    for i in range(4):
+        if target[i] * possible_count != molecule[i]:
             return 0
-        if target[1] == 0:
-            if molecule_dict['H'] > 0:
-                return 0
-            if target[2] == 0:
-                if molecule_dict['O'] > 0:
-                    return 0
-                return int(molecule_dict['N'] / target[3])
-            else:
-                if molecule_dict['O'] % target[2] != 0:
-                    return 0
-                possible_count = int(molecule_dict['O'] / target[2])
-                return possible_count if molecule_dict['N'] == target[3] * possible_count else 0
-        else:
-            if molecule_dict['H'] % target[1] != 0:
-                return 0
-            possible_count = int(molecule_dict['H'] / target[1])
-            if molecule_dict['O'] != target[2] * possible_count:
-                return 0
-            if molecule_dict['N'] != target[3] * possible_count:
-                return 0
-            return possible_count
-    else:
-        possible_count = int(molecule_dict['C'] / target[0])
-        if molecule_dict['H'] != target[1] * possible_count:
-            return 0
-        if molecule_dict['O'] != target[2] * possible_count:
-            return 0
-        if molecule_dict['N'] != target[3] * possible_count:
-            return 0
-        return possible_count
+    return possible_count
 
 traj = ase.io.iread('md.traj', index=slice(0, None, 1))
 
-cell_params = None
 list_of_compositions = list()
 frame_counter = 0
 
 for atoms in traj:
 
-    if cell_params is None:
-        cell_params = np.array(atoms.cell.cellpar()[0:3])
+    cell_params = np.array(atoms.cell.cellpar()[0:3])
     N_atoms = len(atoms)
     
-    molecular_identifiers = list(range(N_atoms))
+    molecular_identifiers = np.linspace(0, N_atoms, N_atoms, dtype=int)
     for i in range(N_atoms):
-        for j in range(i + 1, N_atoms):
-            dist = atoms.positions[i] - atoms.positions[j]
-            dist -= cell_params * np.round(dist / cell_params)
-            if np.dot(dist, dist) <= CUTOFF_LENGTH_SQ:
-                molecular_identifiers[j] = molecular_identifiers[i]
+        dist = atoms.positions - atoms.positions[i]
+        dist -= cell_params * np.round(dist / cell_params)
+        dist_sq = np.sum(np.square(dist), axis=1)
+        molecular_identifiers[dist_sq <= CUTOFF_LENGTH_SQ] = molecular_identifiers[i]
 
-    composition = dict()
-    for target in MOLECULES_TO_FIND:
-        composition[target[1]] = 0
+    composition = {key[1]: 0 for key in MOLECULES_TO_FIND}
     
     molecules = np.unique(molecular_identifiers)
     for molecule_index in molecules:
-        molecule_dict = {'C': 0, 'H': 0, 'O': 0, 'N': 0}
-        for i in range(N_atoms):
-            if molecular_identifiers[i] == molecule_index:
-                molecule_dict[atoms[i].symbol] += 1
+        molecule_contents = [0, 0, 0, 0]
+        molecule_contents[0] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'C'))
+        molecule_contents[1] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'H'))
+        molecule_contents[2] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'O'))
+        molecule_contents[3] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'N'))
         for target in MOLECULES_TO_FIND:
-            composition[target[1]] += count_molecules(molecule_dict, target[0])
+            composition[target[1]] += count_molecules(molecule_contents, target[0])
     
     list_of_compositions.append(composition)
     frame_counter += 1
 
-conv_arr = np.linspace(-2, 2, 2 * CONVOLUTION_WIDTH + 1)
+conv_arr = np.linspace(-3, 3, 3 * CONVOLUTION_WIDTH + 1)
 conv_arr = np.exp(-0.5 * np.square(conv_arr))
 conv_arr = conv_arr / np.sum(conv_arr)
 

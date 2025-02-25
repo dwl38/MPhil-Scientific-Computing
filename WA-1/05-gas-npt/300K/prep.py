@@ -1,6 +1,6 @@
 import sys
-import os
 import time
+import numpy as np
 import ase.io
 
 # To suppress warnings from PyTorch coming in through MACE
@@ -28,14 +28,11 @@ START_FILE = '../../00-common/geoms/crystal.xyz'
 
 print('Preparing system...')
 atoms = ase.io.read(START_FILE)
-atoms.set_pbc(False)
-atoms.positions[:,0] -= np.min(atoms.positions[:,0])
-atoms.positions[:,1] -= np.min(atoms.positions[:,1])
-atoms.positions[:,2] -= np.min(atoms.positions[:,2])
-width_x = np.max(atoms.positions[:,0]) + 1
-width_y = np.max(atoms.positions[:,1]) + 1
-width_z = np.max(atoms.positions[:,2]) + 1
-atoms.set_cell([[width_x, 0, 0], [0, width_y, 0], [0, 0, width_z]])
+width_x = np.max(atoms.positions[:,0]) - np.min(atoms.positions[:,0]) + 1
+width_y = np.max(atoms.positions[:,1]) - np.min(atoms.positions[:,1]) + 1
+width_z = np.max(atoms.positions[:,2]) - np.min(atoms.positions[:,2]) + 1
+width = max(max(width_x, width_y), width_z)
+atoms.set_cell(width * np.identity(3))
 atoms.set_pbc(True)
 
 print('Loading MACE-MP-0 model...')

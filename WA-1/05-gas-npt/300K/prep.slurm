@@ -11,7 +11,6 @@
 #SBATCH --gres=gpu:1
 #SBATCH --time=1:00:00
 #SBATCH --mail-type=NONE
-##SBATCH --no-requeue
 #SBATCH -p ampere
 
 #! sbatch directives end here (put any additional directives above this line)
@@ -46,9 +45,6 @@ export OMP_NUM_THREADS=1
 
 #! Number of MPI tasks to be started by the application per node and in total (do not change):
 np=$[${numnodes}*${mpi_tasks_per_node}]
-
-#! Choose this for a MPI code using OpenMPI:
-#CMD="mpirun -npernode $mpi_tasks_per_node -np $np $application $options"
 
 
 ###############################################################

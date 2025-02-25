@@ -21,7 +21,8 @@ from ase import units
 #==================================================================================================
 # Modify parameters here
 
-N_STEPS = 100000
+#N_STEPS = 100000
+N_STEPS = 1000
 TIMESTEP = 1 * units.fs
 
 MACE_MODEL = '../00-common/mace-models/MACE-OFF24_medium.model'

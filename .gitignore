@@ -6,6 +6,10 @@ WA-1/00-common/venv/*
 !WA-1/00-common/venv/setup.sh
 !WA-1/00-common/venv/clean.sh
 
+WA-2/venv/*
+!WA-2/venv/setup.sh
+!WA-2/venv/clean.sh
+
 ########################
 # Raw trajectory files #
 ########################

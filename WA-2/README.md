@@ -12,14 +12,21 @@ A small collection of example datasets was also provided to students to select f
 
 ---
 
-In my case, ...
-
-(TODO: Write this section)
+In my case, I selected the dataset for defected graphene with water interfaces (for no particular reason beyond simple curiosity).
 
 
 ---
 
 The project structure is as follows:
 
-(TODO: Write this section)
+- `📁 data`: Data files to begin training from
+
+> [!IMPORTANT]
+> The actual data file, `data/input.xyz` itself, is not in this repository due to large file size!
+
+- `📁 finetune`: Fine-tuned model, derived from MACE-MP-0
+
+- `📁 scratch`: Model trained from scratch, with the same hyperparameters as the finetuned model
+
+- `📁 eval`: Series of tests and evaluations, to compare between the two models
 

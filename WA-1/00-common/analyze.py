@@ -20,6 +20,8 @@
 
 import sys
 import os
+import time
+import argparse
 import numpy as np
 import ase.io
 import matplotlib.pyplot as plt
@@ -31,92 +33,111 @@ import matplotlib.pyplot as plt
 CUTOFF_LENGTH = 1.85
 CUTOFF_LENGTH_SQ = CUTOFF_LENGTH**2
 
-CONVOLUTION_WIDTH = 200
+CONVOLUTION_WIDTH = 250
 
-MOLECULES_TO_FIND = [[[6, 6, 6, 6], r'TATB'],     # TATB, C6H6O6N6
-                     [[6, 4, 5, 6], r'TATB-F1'],  # TATB-F1 (furazan intermediate), C6H4O5N6
-                     [[6, 2, 4, 6], r'TATB-F2'],  # TATB-F2 (furazan intermediate), C6H2O4N6
-                     [[6, 0, 3, 6], r'TATB-F3'],  # TATB-F3 (furazan intermediate), C6O3N6
-                     [[1, 0, 2, 0], r'$CO_{2}$'], # Carbon dioxide, CO2
-                     [[1, 0, 1, 0], r'$CO$'],     # Carbon monoxide, CO
-                     [[0, 2, 1, 0], r'$H_{2}O$'], # Water, H2O
-                     [[0, 0, 0, 2], r'$N_{2}$'],  # Nitrogen gas, N2
-                     [[0, 0, 1, 2], r'$N_{2}O$'], # Nitrous oxide, N2O
-                     [[0, 0, 1, 1], r'$NO$'],     # Nitrogen monoxide, NO
-                     [[0, 0, 2, 1], r'$NO_{2}$']] # Nitrogen dioxide, NO2
+MOLECULES_TO_FIND = [[[6, 6, 6, 6], r'TATB', 'TATB'],       # TATB, C6H6O6N6
+                     [[6, 4, 5, 6], r'TATB-F1', 'TATB-F1'], # Furazan intermediate, C6H4O5N6
+                     [[6, 2, 4, 6], r'TATB-F2', 'TATB-F2'], # Furazan intermediate, C6H2O4N6
+                     [[6, 0, 3, 6], r'TATB-F3', 'TATB-F3'], # Furazan intermediate, C6O3N6
+                     [[1, 0, 2, 0], r'$CO_{2}$', 'CO2'],    # Carbon dioxide
+                     [[1, 0, 1, 0], r'$CO$', 'CO'],         # Carbon monoxide
+                     [[0, 2, 1, 0], r'$H_{2}O$', 'H2O'],    # Water
+                     [[0, 0, 2, 1], r'$NO_{2}$', 'NO2'],    # Nitrous dioxide
+                     [[0, 0, 1, 2], r'$N_{2}O$', 'N2O'],    # Nitrous oxide
+                     [[0, 0, 1, 1], r'$NO$', 'NO'],         # Nitrogen monoxide
+                     [[0, 0, 0, 2], r'$N_{2}$', 'N2']]      # Nitrogen gas
 
 
 #==================================================================================================
 
-if len(sys.argv) > 1:
-    os.chdir(sys.argv[1])
-if not os.path.isfile('md.traj'):
-    print('md.traj not found!')
+# Parse input arguments
+parser = argparse.ArgumentParser(prog='analyze.py')
+parser.add_argument('dirname', default='./')
+parser.add_argument('--traj', default='md.traj')
+parser.add_argument('-o', '--output', default='compositions.png')
+parser.add_argument('--filter', action='extend', nargs='*', default=None)
+args = parser.parse_args()
+
+# File system handling
+os.chdir(args.dirname)
+if not os.path.isfile(args.traj):
+    print(f'{args.traj} not found!')
     sys.exit()
-if os.path.isfile('compositions.png'):
-    os.remove('compositions.png')
+if os.path.isfile(args.output):
+    os.remove(args.output)
 
-def count_molecules(molecule, target):
-    if np.sum(np.mod(molecule, target)) > 0:
-        return 0
-    nonzero_index = np.nonzero(target)[0][0]
-    possible_count = molecule[nonzero_index] / target[nonzero_index]
-    for i in range(4):
-        if target[i] * possible_count != molecule[i]:
-            return 0
-    return possible_count
+# Filter only desired molecules
+if args.filter is not None:
+    whitelist = [[np.array(mol[0]), np.nonzero(mol[0])[0], mol[1]] for mol in MOLECULES_TO_FIND if mol[2] in args.filter]
+else:
+    whitelist = [[np.array(mol[0]), np.nonzero(mol[0])[0], mol[1]] for mol in MOLECULES_TO_FIND]
+MOLECULES_TO_FIND = whitelist
+print('Filtering for only: ', end='')
+for mol in MOLECULES_TO_FIND:
+    print(mol[2], end=' ')
+print()
 
-traj = ase.io.iread('md.traj', index=slice(0, None, 1))
-
+# Read trajectory
+time_start = time.time()
 list_of_compositions = list()
 frame_counter = 0
+molecule = np.zeros((4,), dtype=int)
+traj = ase.io.iread(args.traj, index=slice(0, None, 1))
 
 for atoms in traj:
 
     cell_params = np.array(atoms.cell.cellpar()[0:3])
     N_atoms = len(atoms)
     
-    molecular_identifiers = np.linspace(0, N_atoms, N_atoms, dtype=int)
+    molecular_label = np.linspace(0, N_atoms, N_atoms, dtype=int)
     for i in range(N_atoms):
         dist = atoms.positions - atoms.positions[i]
         dist -= cell_params * np.round(dist / cell_params)
         dist_sq = np.sum(np.square(dist), axis=1)
-        molecular_identifiers[dist_sq <= CUTOFF_LENGTH_SQ] = molecular_identifiers[i]
+        molecular_label[dist_sq <= CUTOFF_LENGTH_SQ] = molecular_label[i]
 
-    composition = {key[1]: 0 for key in MOLECULES_TO_FIND}
+    composition = {key[2]: 0 for key in MOLECULES_TO_FIND}
     
-    molecules = np.unique(molecular_identifiers)
-    for molecule_index in molecules:
-        molecule_contents = [0, 0, 0, 0]
-        molecule_contents[0] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'C'))
-        molecule_contents[1] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'H'))
-        molecule_contents[2] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'O'))
-        molecule_contents[3] += np.sum(np.logical_and(molecular_identifiers == molecules, atoms.symbols == 'N'))
+    unique_labels = np.unique(molecular_label)
+    for index in unique_labels:
+        molecule[:] = 0
+        molecule[0] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'C'))
+        molecule[1] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'H'))
+        molecule[2] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'O'))
+        molecule[3] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'N'))
         for target in MOLECULES_TO_FIND:
-            composition[target[1]] += count_molecules(molecule_contents, target[0])
+            molecule_components = molecule[target[1]]
+            count = np.min(np.floor_divide(molecule_components, target[0][target[1]]))
+            composition[target[2]] += count
+            molecule -= count * target[0]
     
     list_of_compositions.append(composition)
     frame_counter += 1
 
+# Convolution array for Gaussian smoothing
 conv_arr = np.linspace(-3, 3, 3 * CONVOLUTION_WIDTH + 1)
 conv_arr = np.exp(-0.5 * np.square(conv_arr))
 conv_arr = conv_arr / np.sum(conv_arr)
 
+# Generate plot
 fig, axis = plt.subplots()
 fig.set_size_inches(12, 9)
 for target in MOLECULES_TO_FIND:
-    counts = list()
-    display = False
-    for frame in list_of_compositions:
-        counts.append(frame[target[1]])
-        if frame[target[1]] > 0:
-            display = True
-    if display:
-        axis.plot(np.convolve(counts, conv_arr, 'valid'), label=target[1])
+    counts = [frame[target[2]] for frame in list_of_compositions]
+    if np.sum(counts) > 0:
+        axis.plot(np.convolve(counts, conv_arr, 'valid'), label=target[2])
 axis.set_title('Molecule counts over frame number')
 axis.set_xlabel('Frame no.')
 axis.set_ylabel('Count')
 axis.legend()
-fig.savefig('compositions.png', dpi=fig.dpi)
+fig.savefig(args.output, dpi=fig.dpi)
+
+# End of program
+time_taken = time.time() - time_start
+hours = int(time_taken / 3600)
+time_taken -= hours * 3600
+mins = int(time_taken / 60)
+time_taken -= mins * 60
+print(f'Wall time taken (hh:mm:ss) was {hours:02}:{mins:02}:{round(time_taken):02}.')
 
 sys.exit()

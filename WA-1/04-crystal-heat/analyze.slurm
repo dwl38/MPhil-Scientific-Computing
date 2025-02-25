@@ -63,7 +63,7 @@ conda activate venv
 application="python"
 
 #! Run options for the application:
-options="../00-common/analyze.py 650K"
+options="../00-common/analyze.py 650K --filter TATB TATB-F1 TATB-F2 TATB-F3 H2O NO2"
 
 #! Work directory (i.e. where the job will run):
 workdir="$SLURM_SUBMIT_DIR"  # The value of SLURM_SUBMIT_DIR sets workdir to the directory

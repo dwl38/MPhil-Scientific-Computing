@@ -25,7 +25,7 @@ python ../venv/mace/mace/cli/run_train.py \
 	--E0s="{1:-13.656315639066156,6:-146.65071522867848,8:-432.2257363227328}" \
 	--model="MACE" \
 	--hidden_irreps='128x0e + 128x1o' \
-	--r_max=5.0 \
+	--r_max=6.0 \
 	--batch_size=10 \
 	--max_num_epochs=1500 \
 	--swa \

@@ -19,12 +19,17 @@ In my case, I selected the dataset for defected graphene with water interfaces (
 
 The project structure is as follows:
 
+- `📁 venv`: Python virtual environment needed to run the MACE models
+
+> [!IMPORTANT]
+> This repository does not contain the Python environment files themselves, due to large filesizes! Run the script `venv/setup.sh` to download and install the environment, and `source venv/bin/activate` to activate the environment, before running any script.
+
 - `📁 data`: Data files to begin training from
 
 > [!IMPORTANT]
-> The actual data file, `data/input.xyz` itself, is not in this repository due to large file size!
+> The actual data files are not in this repository due to large file size!
 
-- `📁 finetune`: Fine-tuned model, derived from MACE-MP-0
+- `📁 finetune`: Fine-tuned model, derived from MACE-MP-0b
 
 - `📁 scratch`: Model trained from scratch, with the same hyperparameters as the finetuned model
 

@@ -9,7 +9,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
-#SBATCH --time=15:00:00
+#SBATCH --time=08:00:00
 #SBATCH --mail-type=NONE
 ##SBATCH --no-requeue
 #SBATCH -p ampere
@@ -34,7 +34,7 @@ source ~/.bashrc
 conda activate venv
 
 #! Command to run application: 
-CMD="python run.py 700 900 1000 0; python run.py 900 1100 1000 0"
+CMD="python run.py 900 1100 1000 0"
 
 #! Work directory (i.e. where the job will run):
 workdir="$SLURM_SUBMIT_DIR"  # The value of SLURM_SUBMIT_DIR sets workdir to the directory

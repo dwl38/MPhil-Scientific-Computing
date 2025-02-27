@@ -12,7 +12,7 @@ A small collection of example datasets was also provided to students to select f
 
 ---
 
-In my case, I selected the dataset for defected graphene with water interfaces (for no particular reason beyond simple curiosity).
+In my case, I selected the dataset for (up to) one molecule of NaCl dissolved in water, for no particular reason beyond simple curiosity.
 
 
 ---
@@ -24,12 +24,11 @@ The project structure is as follows:
 > [!IMPORTANT]
 > This repository does not contain the Python environment files themselves, due to large filesizes! Run the script `venv/setup.sh` to download and install the environment, and `source venv/bin/activate` to activate the environment, before running any script.
 
-- `📁 data`: Data files to begin training from
+- `📁 data`: Dataset to train on
 
-> [!IMPORTANT]
-> The actual data files are not in this repository due to large file size!
+- `📁 finetune_naive`: Fine-tuned model, derived from MACE-MP-0b, using naive transfer learning
 
-- `📁 finetune`: Fine-tuned model, derived from MACE-MP-0b
+- `📁 finetune_multi`: Fine-tuned model, derived from MACE-MP-0b, using multihead replay to prevent catastrophic forgetting
 
 - `📁 scratch`: Model trained from scratch, with the same hyperparameters as the finetuned model
 

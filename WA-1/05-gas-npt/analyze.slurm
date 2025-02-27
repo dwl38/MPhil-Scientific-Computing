@@ -16,6 +16,6 @@ conda init
 source ~/.bashrc
 conda activate venv
 
-python ../00-common/analyze.py 900K --filter TATB TATB-F1 TATB-F2 TATB-F3 H2O NO2
+python ../00-common/analyze.py 1100K --filter TATB TATB-F1 TATB-F2 TATB-F3 H2O NO2
 
 

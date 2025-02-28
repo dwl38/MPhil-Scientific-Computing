@@ -53,15 +53,17 @@ for i in range(4):
         lengths[elems[j]][elems[i]] = None
 
 # Generate plot
-fig, axis = plt.subplots()
-fig.set_size_inches(12, 9)
+fig, axes = plt.subplots(10, 1)
+fig.set_size_inches(12, 90)
+axis_counter = 0
 for i in range(4):
-    for j in range(i + 1, 4):
-        axis.hist(lengths[elems[i]][elems[j]], density=True, histtype='step', label=(elems[i] + '-' + elems[j]))
-axis.set_title('Bond length distributions')
-axis.set_xlabel(r'Bond length ($\AA$)')
-axis.set_ylabel('Density')
-axis.legend()
+    for j in range(i, 4):
+        axes[axis_counter].hist(lengths[elems[i]][elems[j]], density=True, histtype='step', label=(elems[i] + '-' + elems[j]))
+        axes[axis_counter].set_title(f'Bond length distributions for {elems[i]}-{elems[j]}')
+        axes[axis_counter].set_xlabel(r'Bond length ($\AA$)')
+        axes[axis_counter].set_ylabel('Density')
+        axes[axis_counter].legend()
+        axis_counter += 1
 fig.savefig(args.output, dpi=fig.dpi)
 
 # End of program

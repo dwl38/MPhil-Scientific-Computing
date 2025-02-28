@@ -5,7 +5,7 @@
 #SBATCH -p icelake
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --time=00:30:00
+#SBATCH --time=01:00:00
 #SBATCH --mail-type=NONE
 
 . /etc/profile.d/modules.sh                # Leave this line (enables the module command)

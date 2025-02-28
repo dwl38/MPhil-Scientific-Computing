@@ -58,7 +58,7 @@ fig.set_size_inches(12, 90)
 axis_counter = 0
 for i in range(4):
     for j in range(i, 4):
-        axes[axis_counter].hist(lengths[elems[i]][elems[j]], density=True, histtype='step', label=(elems[i] + '-' + elems[j]))
+        axes[axis_counter].hist(lengths[elems[i]][elems[j]], density=True, label=(elems[i] + '-' + elems[j]))
         axes[axis_counter].set_title(f'Bond length distributions for {elems[i]}-{elems[j]}')
         axes[axis_counter].set_xlabel(r'Bond length ($\AA$)')
         axes[axis_counter].set_ylabel('Density')

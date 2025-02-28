@@ -52,18 +52,38 @@ for i in range(4):
         lengths[elems[i]][elems[j]] += lengths[elems[j]][elems[i]]
         lengths[elems[j]][elems[i]] = None
 
+# Plotting function
+def plot_histogram(axis, lengths, elem_i, elem_j):
+    samples = np.array(lengths[elem_i][elem_j])
+    lower = np.min(samples)
+    upper = np.max(samples)
+    width = (upper - lower) / samples.shape[0]
+    scalefactor = -0.5 * np.power(width, -2)
+    prefactor = 1.0 / (np.sqrt(2 * np.pi) * width * samples.shape[0])
+    x = np.linspace(lower, upper, 250)
+    y = prefactor * np.sum(np.exp(scalefactor * np.square(x[:, np.newaxis] - samples[np.newaxis, :])), axis=-1)
+    height = np.max(y)
+    iqr0 = int(0.25 * samples.shape[0])
+    iqr1 = int(0.5 * samples.shape[0])
+    iqr2 = int(0.75 * samples.shape[0])
+    iqr0, iqr1, iqr2 = np.partition(samples, [iqr0, iqr1, iqr2])[[iqr0, iqr1, iqr2]]
+    axis.plot(x, y, 'b-', label=f'{elem_i}-{elem_j}')
+    axis.plot([iqr0, iqr0], [0, height], '--', color='gray', label=f'{round(iqr0, 2)} ' + r'$\AA$')
+    axis.plot([iqr1, iqr1], [0, height], '--', color='gray', label=f'{round(iqr1, 2)} ' + r'$\AA$')
+    axis.plot([iqr2, iqr2], [0, height], '--', color='gray', label=f'{round(iqr2, 2)} ' + r'$\AA$')
+    axis.set_title(f'Bond length distributions for {elem_i}-{elem_j}')
+    axis.set_xlabel(r'Bond length ($\AA$)')
+    axis.set_ylabel('Density')
+    axis.legend()
+
 # Generate plot
 fig, axes = plt.subplots(10, 1)
-fig.set_size_inches(12, 90)
-axis_counter = 0
+fig.set_size_inches(12, 80)
+counter = 0
 for i in range(4):
     for j in range(i, 4):
-        axes[axis_counter].hist(lengths[elems[i]][elems[j]], density=True, label=(elems[i] + '-' + elems[j]))
-        axes[axis_counter].set_title(f'Bond length distributions for {elems[i]}-{elems[j]}')
-        axes[axis_counter].set_xlabel(r'Bond length ($\AA$)')
-        axes[axis_counter].set_ylabel('Density')
-        axes[axis_counter].legend()
-        axis_counter += 1
+        plot_histogram(axes[counter], lengths, elems[i], elems[j])
+        counter += 1
 fig.savefig(args.output, dpi=fig.dpi)
 
 # End of program

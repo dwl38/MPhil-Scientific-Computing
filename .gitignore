@@ -19,3 +19,9 @@ WA-1/*/traj.xyz
 WA-1/*/*/md.traj
 WA-1/*/*/traj.xyz
 
+#############
+# Test runs #
+#############
+
+WA-2/test/*
+

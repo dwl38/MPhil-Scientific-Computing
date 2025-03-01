@@ -13,8 +13,8 @@
 #
 #--------------------------------------------------------------------------------------------------
 #
-# Internally, the script represents molecules using a list of four integers [C, H, O, N],
-# representing the number of carbon, hydrogen, oxygen, and nitrogen atoms in the molecule.
+# Internally, the script represents molecules using a graph-theoretic representation, with
+# abbreviated labels for common substructures.
 #
 #==================================================================================================
 
@@ -30,10 +30,12 @@ import matplotlib.pyplot as plt
 #==================================================================================================
 # Script parameters
 
-CUTOFF_LENGTH = 1.85
-CUTOFF_LENGTH_SQ = CUTOFF_LENGTH**2
+CUTOFF_LENGTHS = {'C': {'C': 1.80, 'H': 1.36, 'O': 1.79, 'N': 1.90},
+                  'H': {'C': 1.36, 'H': 0.93, 'O': 1.20, 'N': 1.26},
+                  'O': {'C': 1.79, 'H': 1.20, 'O': 1.51, 'N': 1.56},
+                  'N': {'C': 1.90, 'H': 1.26, 'O': 1.56, 'N': 1.38}}
 
-CONVOLUTION_WIDTH = 250
+CONVOLUTION_WIDTH = 300
 
 MOLECULES_TO_FIND = [[[6, 6, 6, 6], r'TATB', 'TATB'],       # TATB, C6H6O6N6
                      [[6, 4, 5, 6], r'TATB-F1', 'TATB-F1'], # Furazan intermediate, C6H4O5N6
@@ -56,6 +58,7 @@ parser.add_argument('dirname', default='./')
 parser.add_argument('--traj', default='md.traj')
 parser.add_argument('-o', '--output', default='compositions.png')
 parser.add_argument('--filter', action='extend', nargs='*', default=None)
+parser.add_argument('--conv-width', type=int, default=CONVOLUTION_WIDTH)
 args = parser.parse_args()
 
 # File system handling
@@ -77,6 +80,9 @@ for mol in MOLECULES_TO_FIND:
     print(mol[2], end=' ')
 print()
 
+CUTOFF_LENGTHS_SQ = {k0: {k1: v1**2 for k1, v1 in v0.items()} for k0, v0 in CUTOFF_LENGTHS.items()}
+CONVOLUTION_WIDTH = args.conv_width
+
 # Read trajectory
 time_start = time.time()
 list_of_compositions = list()
@@ -94,7 +100,9 @@ for atoms in traj:
         dist = atoms.positions - atoms.positions[i]
         dist -= cell_params * np.round(dist / cell_params)
         dist_sq = np.sum(np.square(dist), axis=1)
-        molecular_label[dist_sq <= CUTOFF_LENGTH_SQ] = molecular_label[i]
+        for j in range(i + 1, N_atoms):
+            if dist_sq[j] < CUTOFF_LENGTHS_SQ[atoms[i].symbol][atoms[j].symbol]:
+                molecular_label[j] = molecular_label[i]
 
     composition = {key[2]: 0 for key in MOLECULES_TO_FIND}
     

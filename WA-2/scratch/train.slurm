@@ -19,21 +19,19 @@ source ../venv/bin/activate
 
 python ../venv/mace/mace/cli/run_train.py \
 	--name="model_from_scratch" \
-	--train_file="../data/gra-wat-protonic-defects.xyz" \
+	--train_file="../data/nacl-water-RPA.xyz" \
 	--valid_fraction=0.05 \
 	--config_type_weights='{"Default":1.0}' \
-	--E0s="{1:-13.656315639066156,6:-146.65071522867848,8:-432.2257363227328}" \
 	--model="MACE" \
-	--hidden_irreps='128x0e + 128x1o' \
+	--hidden_irreps='128x0e' \
 	--r_max=6.0 \
-	--batch_size=10 \
-	--max_num_epochs=1500 \
-	--swa \
-	--start_swa=1200 \
+	--batch_size=4 \
+	--max_num_epochs=100 \
 	--ema \
-	--ema_decay=0.99 \
+	--ema_decay=0.995 \
 	--amsgrad \
-	--restart-latest \
-	--device=cuda
+	--device=cuda \
+	--keep_checkpoints \
+	--save_all_checkpoints
 
 

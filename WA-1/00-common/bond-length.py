@@ -55,22 +55,22 @@ for i in range(4):
 # Plotting function
 def plot_histogram(axis, lengths, elem_i, elem_j):
     samples = np.array(lengths[elem_i][elem_j])
+    if samples.shape[0] > 3300000:
+        np.random.shuffle(samples)
+        samples = samples[0:3300000]
     lower = np.min(samples)
     upper = np.max(samples)
-    width = (upper - lower) / samples.shape[0]
+    width = (upper - lower) / np.sqrt(samples.shape[0])
     scalefactor = -0.5 * np.power(width, -2)
     prefactor = 1.0 / (np.sqrt(2 * np.pi) * width * samples.shape[0])
     x = np.linspace(lower, upper, 250)
     y = prefactor * np.sum(np.exp(scalefactor * np.square(x[:, np.newaxis] - samples[np.newaxis, :])), axis=-1)
     height = np.max(y)
-    iqr0 = int(0.25 * samples.shape[0])
-    iqr1 = int(0.5 * samples.shape[0])
-    iqr2 = int(0.75 * samples.shape[0])
-    iqr0, iqr1, iqr2 = np.partition(samples, [iqr0, iqr1, iqr2])[[iqr0, iqr1, iqr2]]
+    peaks = np.argpartition(samples, [-1, -2, -3])[[-1, -2, -3]]
     axis.plot(x, y, 'b-', label=f'{elem_i}-{elem_j}')
-    axis.plot([iqr0, iqr0], [0, height], '--', color='gray', label=f'{round(iqr0, 2)} ' + r'$\AA$')
-    axis.plot([iqr1, iqr1], [0, height], '--', color='gray', label=f'{round(iqr1, 2)} ' + r'$\AA$')
-    axis.plot([iqr2, iqr2], [0, height], '--', color='gray', label=f'{round(iqr2, 2)} ' + r'$\AA$')
+    for i in range(3):
+        peak = samples[peaks[i]]
+        axis.plot([peak, peak], [0, height], '--', color='gray', label=f'{round(peak, 2)} ' + r'$\AA$')
     axis.set_title(f'Bond length distributions for {elem_i}-{elem_j}')
     axis.set_xlabel(r'Bond length ($\AA$)')
     axis.set_ylabel('Density')
@@ -78,7 +78,7 @@ def plot_histogram(axis, lengths, elem_i, elem_j):
 
 # Generate plot
 fig, axes = plt.subplots(10, 1)
-fig.set_size_inches(12, 80)
+fig.set_size_inches(12, 70)
 counter = 0
 for i in range(4):
     for j in range(i, 4):

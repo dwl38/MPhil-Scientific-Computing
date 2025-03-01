@@ -22,6 +22,7 @@ args = parser.parse_args()
 
 # File system handling
 os.chdir(args.dirname)
+print(f'Running in {args.dirname}...', end='')
 if not os.path.isfile(args.traj):
     print(f'{args.traj} not found!')
     sys.exit()
@@ -66,11 +67,9 @@ def plot_histogram(axis, lengths, elem_i, elem_j):
     x = np.linspace(lower, upper, 250)
     y = prefactor * np.sum(np.exp(scalefactor * np.square(x[:, np.newaxis] - samples[np.newaxis, :])), axis=-1)
     height = np.max(y)
-    peaks = np.argpartition(y, [-1, -2, -3])[[-1, -2, -3]]
+    peak = x[np.argmax(y)]
     axis.plot(x, y, 'b-', label=f'{elem_i}-{elem_j}')
-    for i in range(3):
-        peak = x[peaks[i]]
-        axis.plot([peak, peak], [0, height], '--', color='gray', label=f'{round(peak, 2)} ' + r'$\AA$')
+    axis.plot([peak, peak], [0, height], '--', color='gray', label=f'{round(peak, 2)} ' + r'$\AA$')
     axis.set_title(f'Bond length distributions for {elem_i}-{elem_j}')
     axis.set_xlabel(r'Bond length ($\AA$)')
     axis.set_ylabel('Density')
@@ -92,7 +91,7 @@ hours = int(time_taken / 3600)
 time_taken -= hours * 3600
 mins = int(time_taken / 60)
 time_taken -= mins * 60
-print(f'Wall time taken (hh:mm:ss) was {hours:02}:{mins:02}:{round(time_taken):02}.')
+print(f'wall time taken (hh:mm:ss) was {hours:02}:{mins:02}:{round(time_taken):02}.')
 
 sys.exit()
 

@@ -66,10 +66,10 @@ def plot_histogram(axis, lengths, elem_i, elem_j):
     x = np.linspace(lower, upper, 250)
     y = prefactor * np.sum(np.exp(scalefactor * np.square(x[:, np.newaxis] - samples[np.newaxis, :])), axis=-1)
     height = np.max(y)
-    peaks = np.argpartition(samples, [-1, -2, -3])[[-1, -2, -3]]
+    peaks = np.argpartition(y, [-1, -2, -3])[[-1, -2, -3]]
     axis.plot(x, y, 'b-', label=f'{elem_i}-{elem_j}')
     for i in range(3):
-        peak = samples[peaks[i]]
+        peak = x[peaks[i]]
         axis.plot([peak, peak], [0, height], '--', color='gray', label=f'{round(peak, 2)} ' + r'$\AA$')
     axis.set_title(f'Bond length distributions for {elem_i}-{elem_j}')
     axis.set_xlabel(r'Bond length ($\AA$)')

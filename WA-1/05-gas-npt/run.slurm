@@ -18,6 +18,6 @@ conda init
 source ~/.bashrc
 conda activate venv
 
-python run.py 1600 1630 4000 0
+python run.py 1640 1650 10000 25000
 
 

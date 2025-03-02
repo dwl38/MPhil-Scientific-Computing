@@ -62,12 +62,14 @@ parser.add_argument('--conv-width', type=int, default=CONVOLUTION_WIDTH)
 args = parser.parse_args()
 
 # File system handling
+print(f'Processing {args.dirname}...', end='')
 os.chdir(args.dirname)
 if not os.path.isfile(args.traj):
     print(f'{args.traj} not found!')
     sys.exit()
 if os.path.isfile(args.output):
     os.remove(args.output)
+print(f'found {args.traj}, writing to {args.output}...')
 
 # Filter only desired molecules
 if args.filter is not None:

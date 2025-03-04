@@ -82,7 +82,12 @@ for mol in MOLECULES_TO_FIND:
     print(mol[2], end=' ')
 print()
 
-CUTOFF_LENGTHS_SQ = {k0: {k1: v1**2 for k1, v1 in v0.items()} for k0, v0 in CUTOFF_LENGTHS.items()}
+# Internal representation of adjacency matrix
+elems = CUTOFF_LENGTHS.keys()
+CUTOFF_LENGTHS_SQ = np.zeros((4, 4), dtype=float)
+for i in range(4):
+    for j in rang(4):
+        CUTOFF_LENGTHS_SQ[i, j] = (CUTOFF_LENGTHS[elems[i]][elems[j]])**2
 CONVOLUTION_WIDTH = args.conv_width
 
 # Read trajectory
@@ -94,33 +99,40 @@ traj = ase.io.iread(args.traj, index=slice(0, None, 1))
 
 for atoms in traj:
 
+    # Get parameters for this frame
     cell_params = np.array(atoms.cell.cellpar()[0:3])
     N_atoms = len(atoms)
     
+    # Internal representation
+    atoms.numbers[atoms.symbols == 'C'] = 0
+    atoms.numbers[atoms.symbols == 'H'] = 1
+    atoms.numbers[atoms.symbols == 'O'] = 2
+    atoms.numbers[atoms.symbols == 'N'] = 3
+    
+    # Find connected components
     molecular_label = np.linspace(0, N_atoms, N_atoms, dtype=int)
     for i in range(N_atoms):
         dist = atoms.positions - atoms.positions[i]
         dist -= cell_params * np.round(dist / cell_params)
         dist_sq = np.sum(np.square(dist), axis=1)
-        for j in range(i + 1, N_atoms):
-            if dist_sq[j] < CUTOFF_LENGTHS_SQ[atoms[i].symbol][atoms[j].symbol]:
-                molecular_label[j] = molecular_label[i]
+        molecular_label[dist_sq < CUTOFF_LENGTHS_SQ[atoms.numbers[i]]] = molecular_label[i]
 
+    # Deduce compositions based on largest fingerprints
     composition = {key[2]: 0 for key in MOLECULES_TO_FIND}
-    
     unique_labels = np.unique(molecular_label)
     for index in unique_labels:
         molecule[:] = 0
-        molecule[0] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'C'))
-        molecule[1] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'H'))
-        molecule[2] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'O'))
-        molecule[3] += np.sum(np.logical_and(molecular_label == index, atoms.symbols == 'N'))
+        molecule[0] += np.sum(np.logical_and(molecular_label == index, atoms.numbers == 0))
+        molecule[1] += np.sum(np.logical_and(molecular_label == index, atoms.numbers == 1))
+        molecule[2] += np.sum(np.logical_and(molecular_label == index, atoms.numbers == 2))
+        molecule[3] += np.sum(np.logical_and(molecular_label == index, atoms.numbers == 3))
         for target in MOLECULES_TO_FIND:
             molecule_components = molecule[target[1]]
             count = np.min(np.floor_divide(molecule_components, target[0][target[1]]))
             composition[target[2]] += count
             molecule -= count * target[0]
     
+    # Add to found compositions and continue iterating
     list_of_compositions.append(composition)
     frame_counter += 1
 

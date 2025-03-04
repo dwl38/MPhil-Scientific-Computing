@@ -86,7 +86,7 @@ print()
 elems = CUTOFF_LENGTHS.keys()
 CUTOFF_LENGTHS_SQ = np.zeros((4, 4), dtype=float)
 for i in range(4):
-    for j in rang(4):
+    for j in range(4):
         CUTOFF_LENGTHS_SQ[i, j] = (CUTOFF_LENGTHS[elems[i]][elems[j]])**2
 CONVOLUTION_WIDTH = args.conv_width
 

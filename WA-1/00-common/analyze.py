@@ -115,7 +115,7 @@ for atoms in traj:
         dist = atoms.positions - atoms.positions[i]
         dist -= cell_params * np.round(dist / cell_params)
         dist_sq = np.sum(np.square(dist), axis=1)
-        molecular_label[dist_sq < CUTOFF_LENGTHS_SQ[atoms.numbers[i]]] = molecular_label[i]
+        molecular_label[dist_sq < CUTOFF_LENGTHS_SQ[atoms.numbers[i], atoms.numbers]] = molecular_label[i]
 
     # Deduce compositions based on largest fingerprints
     composition = {key[2]: 0 for key in MOLECULES_TO_FIND}

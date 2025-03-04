@@ -18,12 +18,12 @@ module load cudnn
 source ../venv/bin/activate
 
 python ../venv/mace/mace/cli/run_train.py \
-	--name="model_finetuned_naive" \
+	--name="model_finetune_naive" \
 	--train_file="../data/nacl-water-RPA.xyz" \
 	--valid_fraction=0.05 \
 	--config_type_weights='{"Default":1.0}' \
 	--model="MACE" \
-	--foundation_model="small" \
+	--foundation_model="medium" \
 	--multiheads_finetuning=False \
 	--batch_size=4 \
 	--max_num_epochs=100 \

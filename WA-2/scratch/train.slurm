@@ -18,12 +18,12 @@ module load cudnn
 source ../venv/bin/activate
 
 python ../venv/mace/mace/cli/run_train.py \
-	--name="model_from_scratch" \
+	--name="model_scratch" \
 	--train_file="../data/nacl-water-RPA.xyz" \
 	--valid_fraction=0.05 \
 	--config_type_weights='{"Default":1.0}' \
 	--model="MACE" \
-	--hidden_irreps='128x0e' \
+	--hidden_irreps='128x0e + 128x1o' \
 	--r_max=6.0 \
 	--batch_size=4 \
 	--max_num_epochs=100 \

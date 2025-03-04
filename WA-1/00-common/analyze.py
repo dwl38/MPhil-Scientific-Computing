@@ -83,7 +83,7 @@ for mol in MOLECULES_TO_FIND:
 print()
 
 # Internal representation of adjacency matrix
-elems = CUTOFF_LENGTHS.keys()
+elems = list(CUTOFF_LENGTHS.keys())
 CUTOFF_LENGTHS_SQ = np.zeros((4, 4), dtype=float)
 for i in range(4):
     for j in range(4):

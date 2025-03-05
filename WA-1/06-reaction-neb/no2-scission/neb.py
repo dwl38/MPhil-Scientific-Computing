@@ -16,7 +16,7 @@ if not sys.warnoptions:
     warnings.simplefilter('ignore')
 
 from mace.calculators import MACECalculator
-from ase.neb import NEB, NEBOptimizer, NEBTools
+from ase.mep.neb import NEB, NEBOptimizer, NEBTools
 from ase.optimize import LBFGS
 from copy import deepcopy
 
@@ -29,7 +29,7 @@ END_FILE = 'end.xyz'
 
 OUTPUT_DIR = 'results'
 
-MACE_MODEL = '../00-common/mace-models/MACE-OFF24_medium.model'
+MACE_MODEL = '../../00-common/mace-models/MACE-OFF24_medium.model'
 
 #==================================================================================================
 

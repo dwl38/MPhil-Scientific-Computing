@@ -1,0 +1,357 @@
+2025-03-04 22:28:50.723 INFO: ===========VERIFYING SETTINGS===========
+2025-03-04 22:28:50.725 INFO: MACE version: 0.3.10
+2025-03-04 22:28:50.725 DEBUG: Configuration: Namespace(config=None, name='model_scratch', seed=123, work_dir='.', log_dir='./logs', model_dir='.', checkpoints_dir='./checkpoints', results_dir='./results', downloads_dir='./downloads', device='cuda', default_dtype='float64', distributed=False, log_level='INFO', error_table='PerAtomRMSE', model='MACE', r_max=6.0, radial_type='bessel', num_radial_basis=8, num_cutoff_basis=5, pair_repulsion=False, distance_transform='None', interaction='RealAgnosticResidualInteractionBlock', interaction_first='RealAgnosticResidualInteractionBlock', max_ell=3, correlation=3, num_interactions=2, MLP_irreps='16x0e', radial_MLP='[64, 64, 64]', hidden_irreps='128x0e + 128x1o', num_channels=128, max_L=1, gate='silu', scaling='rms_forces_scaling', avg_num_neighbors=1, compute_avg_num_neighbors=True, compute_stress=False, compute_forces=True, train_file='../data/nacl-water-RPA.xyz', valid_file=None, valid_fraction=0.05, test_file=None, test_dir=None, multi_processed_test=False, num_workers=0, pin_memory=True, atomic_numbers=None, mean=None, std=None, statistics_file=None, E0s=None, foundation_filter_elements=True, heads=None, multiheads_finetuning=True, foundation_head=None, weight_pt_head=1.0, num_samples_pt=10000, force_mh_ft_lr=False, subselect_pt='random', pt_train_file=None, pt_valid_file=None, foundation_model_elements=False, keep_isolated_atoms=False, energy_key='REF_energy', forces_key='REF_forces', virials_key='REF_virials', stress_key='REF_stress', dipole_key='REF_dipole', charges_key='REF_charges', loss='weighted', forces_weight=100.0, swa_forces_weight=100.0, energy_weight=1.0, swa_energy_weight=1000.0, virials_weight=1.0, swa_virials_weight=10.0, stress_weight=1.0, swa_stress_weight=10.0, dipole_weight=1.0, swa_dipole_weight=1.0, config_type_weights='{"Default":1.0}', huber_delta=0.01, optimizer='adam', beta=0.9, batch_size=4, valid_batch_size=10, lr=0.01, swa_lr=0.001, weight_decay=5e-07, amsgrad=True, scheduler='ReduceLROnPlateau', lr_factor=0.8, scheduler_patience=50, lr_scheduler_gamma=0.9993, swa=False, start_swa=None, ema=True, ema_decay=0.995, max_num_epochs=100, patience=2048, foundation_model=None, foundation_model_readout=True, eval_interval=1, keep_checkpoints=True, save_all_checkpoints=True, restart_latest=False, save_cpu=False, clip_grad=10.0, enable_cueq=False, wandb=False, wandb_dir=None, wandb_project='', wandb_entity='', wandb_name='', wandb_log_hypers=['num_channels', 'max_L', 'correlation', 'lr', 'swa_lr', 'weight_decay', 'batch_size', 'max_num_epochs', 'start_swa', 'energy_weight', 'forces_weight'])
+2025-03-04 22:28:51.067 INFO: CUDA version: 12.4, CUDA device: 0
+2025-03-04 22:28:53.667 DEBUG: Popen(['git', 'version'], cwd=/rds/user/dwl38/hpc-work/MPhil-Scientific-Computing/WA-2/scratch, stdin=None, shell=False, universal_newlines=False)
+2025-03-04 22:28:53.679 DEBUG: Popen(['git', 'version'], cwd=/rds/user/dwl38/hpc-work/MPhil-Scientific-Computing/WA-2/scratch, stdin=None, shell=False, universal_newlines=False)
+2025-03-04 22:28:53.710 DEBUG: Popen(['git', 'cat-file', '--batch-check'], cwd=/rds/user/dwl38/hpc-work/MPhil-Scientific-Computing, stdin=<valid stream>, shell=False, universal_newlines=False)
+2025-03-04 22:28:53.842 DEBUG: Current Git commit: 6df72ca01554cd89caed77919aaf382027cab80c
+2025-03-04 22:28:53.842 INFO: ===========LOADING INPUT DATA===========
+2025-03-04 22:28:53.842 INFO: Using heads: ['default']
+2025-03-04 22:28:53.843 INFO: =============    Processing head default     ===========
+2025-03-04 22:28:55.623 INFO: Using isolated atom energies from training file
+2025-03-04 22:28:55.664 INFO: Training set [1048 configs, 1048 energy, 554352 forces] loaded from '../data/nacl-water-RPA.xyz'
+2025-03-04 22:28:55.681 INFO: Using random 5% of training set for validation with indices saved in: ./valid_indices_123.txt
+2025-03-04 22:28:55.682 INFO: Validaton set contains 52 configurations [52 energy, 27720 forces]
+2025-03-04 22:28:55.682 INFO: Total number of configurations: train=996, valid=52, tests=[],
+2025-03-04 22:28:55.699 INFO: Atomic Numbers used: [1, 8, 11, 17]
+2025-03-04 22:28:55.699 INFO: Atomic Energies used (z: eV) for head default: {1: -14.058715637648925, 8: -433.0443596510768, 11: -1302.0064166842267, 17: -408.458660525576}
+2025-03-04 22:29:01.445 INFO: Computing average number of neighbors
+2025-03-04 22:29:03.174 INFO: Average number of neighbors: 83.2900013671786
+2025-03-04 22:29:03.175 INFO: During training the following quantities will be reported: energy, forces
+2025-03-04 22:29:03.175 INFO: ===========MODEL DETAILS===========
+2025-03-04 22:29:04.079 INFO: Building model
+2025-03-04 22:29:04.079 INFO: Message passing with 128 channels and max_L=1 (128x0e + 128x1o)
+2025-03-04 22:29:04.079 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2025-03-04 22:29:04.079 INFO: 8 radial and 5 basis functions
+2025-03-04 22:29:04.079 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2025-03-04 22:29:04.079 INFO: Distance transform for radial basis functions: None
+2025-03-04 22:29:04.079 INFO: Hidden irreps: 128x0e + 128x1o
+2025-03-04 22:29:06.086 DEBUG: ScaleShiftMACE(
+  (node_embedding): LinearNodeEmbeddingBlock(
+    (linear): Linear(4x0e -> 128x0e | 512 weights)
+  )
+  (radial_embedding): RadialEmbeddingBlock(
+    (bessel_fn): BesselBasis(r_max=6.0, num_basis=8, trainable=False)
+    (cutoff_fn): PolynomialCutoff(p=5, r_max=6.0)
+  )
+  (spherical_harmonics): SphericalHarmonics()
+  (atomic_energies_fn): AtomicEnergiesBlock(energies=[[-14.0587, -433.0444, -1302.0064, -408.4587]])
+  (interactions): ModuleList(
+    (0): RealAgnosticInteractionBlock(
+      (linear_up): Linear(128x0e -> 128x0e | 16384 weights)
+      (conv_tp): TensorProduct(128x0e x 1x0e+1x1o+1x2e+1x3o -> 128x0e+128x1o+128x2e+128x3o | 512 paths | 512 weights)
+      (conv_tp_weights): FullyConnectedNet[8, 64, 64, 64, 512]
+      (linear): Linear(128x0e+128x1o+128x2e+128x3o -> 128x0e+128x1o+128x2e+128x3o | 65536 weights)
+      (skip_tp): FullyConnectedTensorProduct(128x0e+128x1o+128x2e+128x3o x 4x0e -> 128x0e+128x1o+128x2e+128x3o | 262144 paths | 262144 weights)
+      (reshape): reshape_irreps()
+    )
+    (1): RealAgnosticResidualInteractionBlock(
+      (linear_up): Linear(128x0e+128x1o -> 128x0e+128x1o | 32768 weights)
+      (conv_tp): TensorProduct(128x0e+128x1o x 1x0e+1x1o+1x2e+1x3o -> 256x0e+384x1o+384x2e+256x3o | 1280 paths | 1280 weights)
+      (conv_tp_weights): FullyConnectedNet[8, 64, 64, 64, 1280]
+      (linear): Linear(128x0e+128x0e+128x1o+128x1o+128x1o+128x2e+128x2e+128x2e+128x3o+128x3o -> 128x0e+128x1o+128x2e+128x3o | 163840 weights)
+      (skip_tp): FullyConnectedTensorProduct(128x0e+128x1o x 4x0e -> 128x0e | 65536 paths | 65536 weights)
+      (reshape): reshape_irreps()
+    )
+  )
+  (products): ModuleList(
+    (0): EquivariantProductBasisBlock(
+      (symmetric_contractions): SymmetricContraction(
+        (contractions): ModuleList(
+          (0): Contraction(
+            (contractions_weighting): ModuleList(
+              (0-1): 2 x GraphModule()
+            )
+            (contractions_features): ModuleList(
+              (0-1): 2 x GraphModule()
+            )
+            (weights): ParameterList(
+                (0): Parameter containing: [torch.float64 of size 4x4x128 (cuda:0)]
+                (1): Parameter containing: [torch.float64 of size 4x1x128 (cuda:0)]
+            )
+            (graph_opt_main): GraphModule()
+          )
+          (1): Contraction(
+            (contractions_weighting): ModuleList(
+              (0-1): 2 x GraphModule()
+            )
+            (contractions_features): ModuleList(
+              (0-1): 2 x GraphModule()
+            )
+            (weights): ParameterList(
+                (0): Parameter containing: [torch.float64 of size 4x6x128 (cuda:0)]
+                (1): Parameter containing: [torch.float64 of size 4x1x128 (cuda:0)]
+            )
+            (graph_opt_main): GraphModule()
+          )
+        )
+      )
+      (linear): Linear(128x0e+128x1o -> 128x0e+128x1o | 32768 weights)
+    )
+    (1): EquivariantProductBasisBlock(
+      (symmetric_contractions): SymmetricContraction(
+        (contractions): ModuleList(
+          (0): Contraction(
+            (contractions_weighting): ModuleList(
+              (0-1): 2 x GraphModule()
+            )
+            (contractions_features): ModuleList(
+              (0-1): 2 x GraphModule()
+            )
+            (weights): ParameterList(
+                (0): Parameter containing: [torch.float64 of size 4x4x128 (cuda:0)]
+                (1): Parameter containing: [torch.float64 of size 4x1x128 (cuda:0)]
+            )
+            (graph_opt_main): GraphModule()
+          )
+        )
+      )
+      (linear): Linear(128x0e -> 128x0e | 16384 weights)
+    )
+  )
+  (readouts): ModuleList(
+    (0): LinearReadoutBlock(
+      (linear): Linear(128x0e+128x1o -> 1x0e | 128 weights)
+    )
+    (1): NonLinearReadoutBlock(
+      (linear_1): Linear(128x0e -> 16x0e | 2048 weights)
+      (non_linearity): Activation [x] (16x0e -> 16x0e)
+      (linear_2): Linear(16x0e -> 1x0e | 16 weights)
+    )
+  )
+  (scale_shift): ScaleShiftBlock(scale=0.8516, shift=0.0000)
+)
+2025-03-04 22:29:06.098 INFO: Total number of parameters: 848528
+2025-03-04 22:29:06.099 INFO: 
+2025-03-04 22:29:06.099 INFO: ===========OPTIMIZER INFORMATION===========
+2025-03-04 22:29:06.099 INFO: Using ADAM as parameter optimizer
+2025-03-04 22:29:06.099 INFO: Batch size: 4
+2025-03-04 22:29:06.099 INFO: Using Exponential Moving Average with decay: 0.995
+2025-03-04 22:29:06.099 INFO: Number of gradient updates: 24900
+2025-03-04 22:29:06.099 INFO: Learning rate: 0.01, weight decay: 5e-07
+2025-03-04 22:29:06.099 INFO: WeightedEnergyForcesLoss(energy_weight=1.000, forces_weight=100.000)
+2025-03-04 22:29:06.196 INFO: Using gradient clipping with tolerance=10.000
+2025-03-04 22:29:06.196 INFO: 
+2025-03-04 22:29:06.196 INFO: ===========TRAINING===========
+2025-03-04 22:29:06.196 INFO: Started training, reporting errors on validation set
+2025-03-04 22:29:06.196 INFO: Loss metrics on validation set
+2025-03-04 22:29:18.510 INFO: Initial: head: default, loss=9.43647812, RMSE_E_per_atom= 3370.99 meV, RMSE_F=  842.00 meV / A
+2025-03-04 22:31:01.812 INFO: Epoch 0: head: default, loss=0.10863635, RMSE_E_per_atom=   99.59 meV, RMSE_F=   96.03 meV / A
+2025-03-04 22:31:01.814 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-0.pt
+2025-03-04 22:32:40.449 INFO: Epoch 1: head: default, loss=0.05971152, RMSE_E_per_atom=   25.98 meV, RMSE_F=   71.76 meV / A
+2025-03-04 22:32:40.451 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-1.pt
+2025-03-04 22:34:19.123 INFO: Epoch 2: head: default, loss=0.03235508, RMSE_E_per_atom=   29.21 meV, RMSE_F=   53.07 meV / A
+2025-03-04 22:34:19.125 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-2.pt
+2025-03-04 22:35:57.801 INFO: Epoch 3: head: default, loss=0.02253215, RMSE_E_per_atom=   38.02 meV, RMSE_F=   44.19 meV / A
+2025-03-04 22:35:57.802 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-3.pt
+2025-03-04 22:37:36.539 INFO: Epoch 4: head: default, loss=0.02247044, RMSE_E_per_atom=   36.93 meV, RMSE_F=   43.87 meV / A
+2025-03-04 22:37:36.540 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-4.pt
+2025-03-04 22:39:15.221 INFO: Epoch 5: head: default, loss=0.01854685, RMSE_E_per_atom=   36.71 meV, RMSE_F=   40.06 meV / A
+2025-03-04 22:39:15.222 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-5.pt
+2025-03-04 22:40:53.880 INFO: Epoch 6: head: default, loss=0.01602793, RMSE_E_per_atom=   35.58 meV, RMSE_F=   37.22 meV / A
+2025-03-04 22:40:53.881 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-6.pt
+2025-03-04 22:42:32.549 INFO: Epoch 7: head: default, loss=0.01365421, RMSE_E_per_atom=   34.44 meV, RMSE_F=   34.27 meV / A
+2025-03-04 22:42:32.550 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-7.pt
+2025-03-04 22:44:11.205 INFO: Epoch 8: head: default, loss=0.01181682, RMSE_E_per_atom=   33.27 meV, RMSE_F=   31.78 meV / A
+2025-03-04 22:44:11.207 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-8.pt
+2025-03-04 22:45:49.936 INFO: Epoch 9: head: default, loss=0.01051232, RMSE_E_per_atom=   31.41 meV, RMSE_F=   29.93 meV / A
+2025-03-04 22:45:49.938 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-9.pt
+2025-03-04 22:47:28.648 INFO: Epoch 10: head: default, loss=0.00923423, RMSE_E_per_atom=   30.48 meV, RMSE_F=   27.94 meV / A
+2025-03-04 22:47:28.649 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-10.pt
+2025-03-04 22:49:07.317 INFO: Epoch 11: head: default, loss=0.00871106, RMSE_E_per_atom=   30.11 meV, RMSE_F=   27.09 meV / A
+2025-03-04 22:49:07.318 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-11.pt
+2025-03-04 22:50:45.932 INFO: Epoch 12: head: default, loss=0.00861869, RMSE_E_per_atom=   29.95 meV, RMSE_F=   27.00 meV / A
+2025-03-04 22:50:45.933 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-12.pt
+2025-03-04 22:52:24.545 INFO: Epoch 13: head: default, loss=0.01126227, RMSE_E_per_atom=   29.54 meV, RMSE_F=   30.79 meV / A
+2025-03-04 22:52:24.547 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-13.pt
+2025-03-04 22:54:03.794 INFO: Epoch 14: head: default, loss=0.00838687, RMSE_E_per_atom=   26.14 meV, RMSE_F=   26.60 meV / A
+2025-03-04 22:54:03.796 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-14.pt
+2025-03-04 22:55:42.980 INFO: Epoch 15: head: default, loss=0.00706995, RMSE_E_per_atom=   24.98 meV, RMSE_F=   24.40 meV / A
+2025-03-04 22:55:42.982 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-15.pt
+2025-03-04 22:57:21.576 INFO: Epoch 16: head: default, loss=0.00654642, RMSE_E_per_atom=   24.98 meV, RMSE_F=   23.45 meV / A
+2025-03-04 22:57:21.578 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-16.pt
+2025-03-04 22:59:00.179 INFO: Epoch 17: head: default, loss=0.00603812, RMSE_E_per_atom=   23.42 meV, RMSE_F=   22.52 meV / A
+2025-03-04 22:59:00.181 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-17.pt
+2025-03-04 23:00:38.799 INFO: Epoch 18: head: default, loss=0.00564175, RMSE_E_per_atom=   21.84 meV, RMSE_F=   21.77 meV / A
+2025-03-04 23:00:38.800 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-18.pt
+2025-03-04 23:02:17.389 INFO: Epoch 19: head: default, loss=0.00532741, RMSE_E_per_atom=   21.02 meV, RMSE_F=   21.15 meV / A
+2025-03-04 23:02:17.390 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-19.pt
+2025-03-04 23:03:55.985 INFO: Epoch 20: head: default, loss=0.00523103, RMSE_E_per_atom=   21.08 meV, RMSE_F=   20.95 meV / A
+2025-03-04 23:03:55.986 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-20.pt
+2025-03-04 23:05:34.607 INFO: Epoch 21: head: default, loss=0.00714163, RMSE_E_per_atom=   22.07 meV, RMSE_F=   24.51 meV / A
+2025-03-04 23:05:34.609 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-21.pt
+2025-03-04 23:07:13.184 INFO: Epoch 22: head: default, loss=0.00546883, RMSE_E_per_atom=   21.34 meV, RMSE_F=   21.44 meV / A
+2025-03-04 23:07:13.185 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-22.pt
+2025-03-04 23:08:51.771 INFO: Epoch 23: head: default, loss=0.00504371, RMSE_E_per_atom=   20.25 meV, RMSE_F=   20.55 meV / A
+2025-03-04 23:08:51.772 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-23.pt
+2025-03-04 23:10:30.332 INFO: Epoch 24: head: default, loss=0.00489691, RMSE_E_per_atom=   19.79 meV, RMSE_F=   20.28 meV / A
+2025-03-04 23:10:30.333 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-24.pt
+2025-03-04 23:12:08.893 INFO: Epoch 25: head: default, loss=0.00487325, RMSE_E_per_atom=   19.79 meV, RMSE_F=   20.21 meV / A
+2025-03-04 23:12:08.894 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-25.pt
+2025-03-04 23:13:47.430 INFO: Epoch 26: head: default, loss=0.00477005, RMSE_E_per_atom=   18.94 meV, RMSE_F=   19.99 meV / A
+2025-03-04 23:13:47.431 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-26.pt
+2025-03-04 23:15:25.963 INFO: Epoch 27: head: default, loss=0.00466531, RMSE_E_per_atom=   18.58 meV, RMSE_F=   19.77 meV / A
+2025-03-04 23:15:25.965 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-27.pt
+2025-03-04 23:17:04.531 INFO: Epoch 28: head: default, loss=0.00464731, RMSE_E_per_atom=   18.50 meV, RMSE_F=   19.73 meV / A
+2025-03-04 23:17:04.532 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-28.pt
+2025-03-04 23:18:43.085 INFO: Epoch 29: head: default, loss=0.00435456, RMSE_E_per_atom=   17.57 meV, RMSE_F=   19.12 meV / A
+2025-03-04 23:18:43.087 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-29.pt
+2025-03-04 23:20:21.608 INFO: Epoch 30: head: default, loss=0.00425661, RMSE_E_per_atom=   17.37 meV, RMSE_F=   18.90 meV / A
+2025-03-04 23:20:21.609 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-30.pt
+2025-03-04 23:22:00.225 INFO: Epoch 31: head: default, loss=0.00414483, RMSE_E_per_atom=   16.11 meV, RMSE_F=   18.67 meV / A
+2025-03-04 23:22:00.226 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-31.pt
+2025-03-04 23:23:38.743 INFO: Epoch 32: head: default, loss=0.00415871, RMSE_E_per_atom=   16.77 meV, RMSE_F=   18.70 meV / A
+2025-03-04 23:23:38.744 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-32.pt
+2025-03-04 23:25:17.298 INFO: Epoch 33: head: default, loss=0.00429677, RMSE_E_per_atom=   16.45 meV, RMSE_F=   19.05 meV / A
+2025-03-04 23:25:17.299 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-33.pt
+2025-03-04 23:26:55.805 INFO: Epoch 34: head: default, loss=0.00399858, RMSE_E_per_atom=   16.26 meV, RMSE_F=   18.36 meV / A
+2025-03-04 23:26:55.806 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-34.pt
+2025-03-04 23:28:34.455 INFO: Epoch 35: head: default, loss=0.00378139, RMSE_E_per_atom=   15.47 meV, RMSE_F=   17.86 meV / A
+2025-03-04 23:28:34.456 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-35.pt
+2025-03-04 23:30:12.957 INFO: Epoch 36: head: default, loss=0.00365847, RMSE_E_per_atom=   15.03 meV, RMSE_F=   17.57 meV / A
+2025-03-04 23:30:12.958 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-36.pt
+2025-03-04 23:31:51.525 INFO: Epoch 37: head: default, loss=0.00361657, RMSE_E_per_atom=   14.42 meV, RMSE_F=   17.49 meV / A
+2025-03-04 23:31:51.527 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-37.pt
+2025-03-04 23:33:30.069 INFO: Epoch 38: head: default, loss=0.00353287, RMSE_E_per_atom=   13.80 meV, RMSE_F=   17.28 meV / A
+2025-03-04 23:33:30.071 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-38.pt
+2025-03-04 23:35:13.246 INFO: Epoch 39: head: default, loss=0.00352913, RMSE_E_per_atom=   14.25 meV, RMSE_F=   17.28 meV / A
+2025-03-04 23:35:13.248 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-39.pt
+2025-03-04 23:36:51.735 INFO: Epoch 40: head: default, loss=0.00340016, RMSE_E_per_atom=   13.35 meV, RMSE_F=   16.97 meV / A
+2025-03-04 23:36:51.737 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-40.pt
+2025-03-04 23:38:30.220 INFO: Epoch 41: head: default, loss=0.00332638, RMSE_E_per_atom=   12.92 meV, RMSE_F=   16.79 meV / A
+2025-03-04 23:38:30.221 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-41.pt
+2025-03-04 23:40:08.715 INFO: Epoch 42: head: default, loss=0.00330099, RMSE_E_per_atom=   12.55 meV, RMSE_F=   16.73 meV / A
+2025-03-04 23:40:08.716 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-42.pt
+2025-03-04 23:41:47.199 INFO: Epoch 43: head: default, loss=0.00321491, RMSE_E_per_atom=   12.15 meV, RMSE_F=   16.53 meV / A
+2025-03-04 23:41:47.201 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-43.pt
+2025-03-04 23:43:25.701 INFO: Epoch 44: head: default, loss=0.00313918, RMSE_E_per_atom=   11.14 meV, RMSE_F=   16.34 meV / A
+2025-03-04 23:43:25.702 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-44.pt
+2025-03-04 23:45:04.252 INFO: Epoch 45: head: default, loss=0.00308421, RMSE_E_per_atom=   11.10 meV, RMSE_F=   16.22 meV / A
+2025-03-04 23:45:04.254 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-45.pt
+2025-03-04 23:46:42.772 INFO: Epoch 46: head: default, loss=0.00306263, RMSE_E_per_atom=   10.99 meV, RMSE_F=   16.15 meV / A
+2025-03-04 23:46:42.773 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-46.pt
+2025-03-04 23:48:21.283 INFO: Epoch 47: head: default, loss=0.00345591, RMSE_E_per_atom=   12.87 meV, RMSE_F=   17.13 meV / A
+2025-03-04 23:48:21.284 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-47.pt
+2025-03-04 23:49:59.834 INFO: Epoch 48: head: default, loss=0.00326605, RMSE_E_per_atom=   11.83 meV, RMSE_F=   16.68 meV / A
+2025-03-04 23:49:59.835 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-48.pt
+2025-03-04 23:51:38.358 INFO: Epoch 49: head: default, loss=0.00321936, RMSE_E_per_atom=   12.31 meV, RMSE_F=   16.58 meV / A
+2025-03-04 23:51:38.359 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-49.pt
+2025-03-04 23:53:16.867 INFO: Epoch 50: head: default, loss=0.00323323, RMSE_E_per_atom=   12.61 meV, RMSE_F=   16.63 meV / A
+2025-03-04 23:53:16.868 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-50.pt
+2025-03-04 23:54:55.357 INFO: Epoch 51: head: default, loss=0.00323756, RMSE_E_per_atom=   13.24 meV, RMSE_F=   16.64 meV / A
+2025-03-04 23:54:55.359 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-51.pt
+2025-03-04 23:56:33.873 INFO: Epoch 52: head: default, loss=0.00350767, RMSE_E_per_atom=   13.16 meV, RMSE_F=   17.34 meV / A
+2025-03-04 23:56:33.874 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-52.pt
+2025-03-04 23:58:12.388 INFO: Epoch 53: head: default, loss=0.00333087, RMSE_E_per_atom=   14.41 meV, RMSE_F=   16.86 meV / A
+2025-03-04 23:58:12.389 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-53.pt
+2025-03-04 23:59:50.895 INFO: Epoch 54: head: default, loss=0.00352753, RMSE_E_per_atom=   13.65 meV, RMSE_F=   17.40 meV / A
+2025-03-04 23:59:50.896 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-54.pt
+2025-03-05 00:01:29.450 INFO: Epoch 55: head: default, loss=0.00322515, RMSE_E_per_atom=   14.35 meV, RMSE_F=   16.61 meV / A
+2025-03-05 00:01:29.451 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-55.pt
+2025-03-05 00:03:07.954 INFO: Epoch 56: head: default, loss=0.00327450, RMSE_E_per_atom=   12.67 meV, RMSE_F=   16.75 meV / A
+2025-03-05 00:03:07.955 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-56.pt
+2025-03-05 00:04:46.465 INFO: Epoch 57: head: default, loss=0.00311003, RMSE_E_per_atom=   15.53 meV, RMSE_F=   16.31 meV / A
+2025-03-05 00:04:46.467 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-57.pt
+2025-03-05 00:06:25.043 INFO: Epoch 58: head: default, loss=0.00316261, RMSE_E_per_atom=   12.17 meV, RMSE_F=   16.47 meV / A
+2025-03-05 00:06:25.044 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-58.pt
+2025-03-05 00:08:03.575 INFO: Epoch 59: head: default, loss=0.00309791, RMSE_E_per_atom=   13.50 meV, RMSE_F=   16.32 meV / A
+2025-03-05 00:08:03.576 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-59.pt
+2025-03-05 00:09:42.096 INFO: Epoch 60: head: default, loss=0.00294598, RMSE_E_per_atom=   11.19 meV, RMSE_F=   15.90 meV / A
+2025-03-05 00:09:42.098 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-60.pt
+2025-03-05 00:11:20.593 INFO: Epoch 61: head: default, loss=0.00291816, RMSE_E_per_atom=   11.01 meV, RMSE_F=   15.83 meV / A
+2025-03-05 00:11:20.594 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-61.pt
+2025-03-05 00:12:59.142 INFO: Epoch 62: head: default, loss=0.00279868, RMSE_E_per_atom=   10.90 meV, RMSE_F=   15.51 meV / A
+2025-03-05 00:12:59.143 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-62.pt
+2025-03-05 00:14:37.661 INFO: Epoch 63: head: default, loss=0.00274302, RMSE_E_per_atom=    9.99 meV, RMSE_F=   15.37 meV / A
+2025-03-05 00:14:37.662 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-63.pt
+2025-03-05 00:16:16.235 INFO: Epoch 64: head: default, loss=0.00270904, RMSE_E_per_atom=    9.73 meV, RMSE_F=   15.28 meV / A
+2025-03-05 00:16:16.236 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-64.pt
+2025-03-05 00:17:54.767 INFO: Epoch 65: head: default, loss=0.00263444, RMSE_E_per_atom=    9.98 meV, RMSE_F=   15.07 meV / A
+2025-03-05 00:17:54.769 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-65.pt
+2025-03-05 00:19:33.277 INFO: Epoch 66: head: default, loss=0.00258629, RMSE_E_per_atom=    9.68 meV, RMSE_F=   14.94 meV / A
+2025-03-05 00:19:33.278 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-66.pt
+2025-03-05 00:21:11.807 INFO: Epoch 67: head: default, loss=0.00257862, RMSE_E_per_atom=    9.55 meV, RMSE_F=   14.92 meV / A
+2025-03-05 00:21:11.808 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-67.pt
+2025-03-05 00:22:50.348 INFO: Epoch 68: head: default, loss=0.00253833, RMSE_E_per_atom=    9.13 meV, RMSE_F=   14.81 meV / A
+2025-03-05 00:22:50.349 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-68.pt
+2025-03-05 00:24:28.916 INFO: Epoch 69: head: default, loss=0.00250091, RMSE_E_per_atom=    8.99 meV, RMSE_F=   14.71 meV / A
+2025-03-05 00:24:28.918 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-69.pt
+2025-03-05 00:26:07.388 INFO: Epoch 70: head: default, loss=0.00250737, RMSE_E_per_atom=    8.46 meV, RMSE_F=   14.73 meV / A
+2025-03-05 00:26:07.389 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-70.pt
+2025-03-05 00:27:45.892 INFO: Epoch 71: head: default, loss=0.00245828, RMSE_E_per_atom=    7.79 meV, RMSE_F=   14.59 meV / A
+2025-03-05 00:27:45.894 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-71.pt
+2025-03-05 00:29:24.419 INFO: Epoch 72: head: default, loss=0.00247935, RMSE_E_per_atom=    8.22 meV, RMSE_F=   14.64 meV / A
+2025-03-05 00:29:24.421 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-72.pt
+2025-03-05 00:31:02.913 INFO: Epoch 73: head: default, loss=0.00249301, RMSE_E_per_atom=    8.56 meV, RMSE_F=   14.68 meV / A
+2025-03-05 00:31:02.914 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-73.pt
+2025-03-05 00:32:41.431 INFO: Epoch 74: head: default, loss=0.00249063, RMSE_E_per_atom=    8.60 meV, RMSE_F=   14.69 meV / A
+2025-03-05 00:32:41.432 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-74.pt
+2025-03-05 00:34:19.982 INFO: Epoch 75: head: default, loss=0.00237306, RMSE_E_per_atom=    8.16 meV, RMSE_F=   14.34 meV / A
+2025-03-05 00:34:19.983 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-75.pt
+2025-03-05 00:35:58.500 INFO: Epoch 76: head: default, loss=0.00241726, RMSE_E_per_atom=    8.32 meV, RMSE_F=   14.48 meV / A
+2025-03-05 00:35:58.502 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-76.pt
+2025-03-05 00:37:39.339 INFO: Epoch 77: head: default, loss=0.00233936, RMSE_E_per_atom=    7.62 meV, RMSE_F=   14.24 meV / A
+2025-03-05 00:37:39.378 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-77.pt
+2025-03-05 00:39:19.838 INFO: Epoch 78: head: default, loss=0.00233349, RMSE_E_per_atom=    7.03 meV, RMSE_F=   14.22 meV / A
+2025-03-05 00:39:19.841 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-78.pt
+2025-03-05 00:40:58.573 INFO: Epoch 79: head: default, loss=0.00228297, RMSE_E_per_atom=    7.18 meV, RMSE_F=   14.07 meV / A
+2025-03-05 00:40:58.574 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-79.pt
+2025-03-05 00:42:37.477 INFO: Epoch 80: head: default, loss=0.00228892, RMSE_E_per_atom=    7.17 meV, RMSE_F=   14.09 meV / A
+2025-03-05 00:42:37.478 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-80.pt
+2025-03-05 00:44:16.689 INFO: Epoch 81: head: default, loss=0.00227031, RMSE_E_per_atom=    6.64 meV, RMSE_F=   14.02 meV / A
+2025-03-05 00:44:16.691 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-81.pt
+2025-03-05 00:45:55.289 INFO: Epoch 82: head: default, loss=0.00226215, RMSE_E_per_atom=    6.31 meV, RMSE_F=   14.01 meV / A
+2025-03-05 00:45:55.291 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-82.pt
+2025-03-05 00:47:33.852 INFO: Epoch 83: head: default, loss=0.00224708, RMSE_E_per_atom=    6.28 meV, RMSE_F=   13.96 meV / A
+2025-03-05 00:47:33.854 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-83.pt
+2025-03-05 00:49:12.419 INFO: Epoch 84: head: default, loss=0.00218307, RMSE_E_per_atom=    6.08 meV, RMSE_F=   13.76 meV / A
+2025-03-05 00:49:12.420 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-84.pt
+2025-03-05 00:50:50.981 INFO: Epoch 85: head: default, loss=0.00218472, RMSE_E_per_atom=    5.77 meV, RMSE_F=   13.76 meV / A
+2025-03-05 00:50:50.983 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-85.pt
+2025-03-05 00:52:29.598 INFO: Epoch 86: head: default, loss=0.00219569, RMSE_E_per_atom=    5.67 meV, RMSE_F=   13.79 meV / A
+2025-03-05 00:52:29.599 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-86.pt
+2025-03-05 00:54:08.182 INFO: Epoch 87: head: default, loss=0.00215143, RMSE_E_per_atom=    6.19 meV, RMSE_F=   13.66 meV / A
+2025-03-05 00:54:08.183 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-87.pt
+2025-03-05 00:55:46.590 INFO: Epoch 88: head: default, loss=0.00215759, RMSE_E_per_atom=    5.61 meV, RMSE_F=   13.67 meV / A
+2025-03-05 00:55:46.591 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-88.pt
+2025-03-05 00:57:24.664 INFO: Epoch 89: head: default, loss=0.00218357, RMSE_E_per_atom=    5.92 meV, RMSE_F=   13.73 meV / A
+2025-03-05 00:57:24.665 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-89.pt
+2025-03-05 00:59:02.730 INFO: Epoch 90: head: default, loss=0.00228159, RMSE_E_per_atom=    6.10 meV, RMSE_F=   14.06 meV / A
+2025-03-05 00:59:02.732 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-90.pt
+2025-03-05 01:00:40.808 INFO: Epoch 91: head: default, loss=0.00243911, RMSE_E_per_atom=    7.96 meV, RMSE_F=   14.51 meV / A
+2025-03-05 01:00:40.810 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-91.pt
+2025-03-05 01:02:18.883 INFO: Epoch 92: head: default, loss=0.00233544, RMSE_E_per_atom=    6.47 meV, RMSE_F=   14.19 meV / A
+2025-03-05 01:02:18.884 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-92.pt
+2025-03-05 01:03:56.892 INFO: Epoch 93: head: default, loss=0.00223930, RMSE_E_per_atom=    7.41 meV, RMSE_F=   13.91 meV / A
+2025-03-05 01:03:56.893 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-93.pt
+2025-03-05 01:05:34.939 INFO: Epoch 94: head: default, loss=0.00217883, RMSE_E_per_atom=    6.11 meV, RMSE_F=   13.73 meV / A
+2025-03-05 01:05:34.941 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-94.pt
+2025-03-05 01:07:12.938 INFO: Epoch 95: head: default, loss=0.00218328, RMSE_E_per_atom=    6.49 meV, RMSE_F=   13.74 meV / A
+2025-03-05 01:07:12.939 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-95.pt
+2025-03-05 01:08:51.003 INFO: Epoch 96: head: default, loss=0.00216401, RMSE_E_per_atom=    5.84 meV, RMSE_F=   13.68 meV / A
+2025-03-05 01:08:51.004 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-96.pt
+2025-03-05 01:10:29.037 INFO: Epoch 97: head: default, loss=0.00222502, RMSE_E_per_atom=    6.66 meV, RMSE_F=   13.84 meV / A
+2025-03-05 01:10:29.039 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-97.pt
+2025-03-05 01:12:07.044 INFO: Epoch 98: head: default, loss=0.00223542, RMSE_E_per_atom=    5.57 meV, RMSE_F=   13.90 meV / A
+2025-03-05 01:12:07.045 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-98.pt
+2025-03-05 01:13:45.108 INFO: Epoch 99: head: default, loss=0.00223983, RMSE_E_per_atom=    6.32 meV, RMSE_F=   13.90 meV / A
+2025-03-05 01:13:45.109 DEBUG: Saving checkpoint: ./checkpoints/model_scratch_run-123_epoch-99.pt
+2025-03-05 01:13:45.231 INFO: Training complete
+2025-03-05 01:13:45.231 INFO: 
+2025-03-05 01:13:45.231 INFO: ===========RESULTS===========
+2025-03-05 01:13:45.231 INFO: Computing metrics for training, validation, and test sets
+2025-03-05 01:13:46.466 INFO: Loading checkpoint: ./checkpoints/model_scratch_run-123_epoch-99.pt
+2025-03-05 01:13:46.979 INFO: Loaded Stage one model from epoch 99 for evaluation
+2025-03-05 01:13:46.980 INFO: Evaluating train_default ...
+2025-03-05 01:14:18.327 INFO: Evaluating valid_default ...
+2025-03-05 01:14:19.917 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % |
++---------------+---------------------+------------------+-------------------+
+| train_default |            6.2      |         15.6     |          1.84     |
+| valid_default |            6.3      |         13.9     |          1.65     |
++---------------+---------------------+------------------+-------------------+
+2025-03-05 01:14:19.918 INFO: Saving model to checkpoints/model_scratch_run-123.model
+2025-03-05 01:14:20.183 INFO: Compiling model, saving metadata to model_scratch_compiled.model
+2025-03-05 01:14:20.885 INFO: Done

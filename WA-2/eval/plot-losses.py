@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 #==================================================================================================
 # Script parameters
 
-INPUT_FILES = {'scratch': '../scratch/results/model_from_scratch_run-123_train.txt',
-               'finetune_naive': '../finetune_naive/results/model_finetuned_naive_run-123_train.txt',
-               'finetune_multihead': '../finetune_multihead/results/model_finetuned_naive_run-123_train.txt'} # N.B. there was mistake in the model name for this one
+INPUT_FILES = {'scratch': '../scratch/results/model_scratch_run-123_train.txt',
+               'finetune_naive': '../finetune_naive/results/model_finetune_naive_run-123_train.txt',
+               'finetune_multihead': '../finetune_multihead/results/model_finetune_multihead_run-123_train.txt'}
 
 #==================================================================================================
 # Do not modify below this line

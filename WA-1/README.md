@@ -49,6 +49,10 @@ The project structure is as follows:
 - `📁 03-crystal-rtp`: A NpT simulation of a solid TATB crystal at 300K, 1 atm for equilibration
   
 - `📁 04-crystal-heat`: A series of NpT simulations of a solid TATB crystal at 1 atm, with increasing temperature
+  
+- `📁 05-gas-npt`: A series of NpT simulations of what was initially a TATB crystal, but with the wrong boundary conditions, at 1 atm with increasing temperature; intended to represent a "high-density gas"
+  
+- `📁 06-reaction-neb`: Using NEB to find the energy barrier of the thermal decomposition reaction
 
 > [!NOTE]
 > The trajectory files are not in this repository, due to their large sizes; only the simulation logs and processed results are.

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -J scratch-MACE
+#SBATCH -J finetune_naive_MACE
 #SBATCH -A NIKIFORAKIS-LIM-SL2-GPU
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

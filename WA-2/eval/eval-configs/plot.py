@@ -13,7 +13,7 @@ INPUT_FILES = ['scratch.xyz',
 #==================================================================================================
 # Do not modify below this line
 
-fig, axes = plt.subplots(2, len(INPUT_FILES))
+fig, axes = plt.subplots(3, len(INPUT_FILES))
 
 def is_int(s):
     try:
@@ -28,6 +28,7 @@ for i, filename in enumerate(INPUT_FILES):
     mace_energies = list()
     ref_forces = list()
     mace_forces = list()
+    force_diffs = list()
 
     with open(filename, 'r') as f:
 
@@ -39,8 +40,6 @@ for i, filename in enumerate(INPUT_FILES):
             if lines_expected == 0 and is_int(line):
                 lines_expected = int(line)
                 header_expected = True
-                frame_ref_forces = list()
-                frame_mace_forces = list()
             elif header_expected:
                 header_expected = False
                 str_index_start = line.find('REF_energy=') + 11
@@ -52,12 +51,11 @@ for i, filename in enumerate(INPUT_FILES):
             elif lines_expected > 0:
                 lines_expected -= 1
                 force_components = line.split()[-6:]
-                frame_ref_forces.append([float(force_components[0]), float(force_components[1]), float(force_components[2])])
-                frame_mace_forces.append([float(force_components[3]), float(force_components[4]), float(force_components[5])])
-
-            if lines_expected == 0:
-                ref_forces.append(np.mean(np.sqrt(np.sum(np.square(frame_ref_forces), axis=-1))))
-                mace_forces.append(np.mean(np.sqrt(np.sum(np.square(frame_mace_forces), axis=-1))))
+                ref_F = np.array([float(force_components[0]), float(force_components[1]), float(force_components[2])])
+                mace_F = np.array([float(force_components[3]), float(force_components[4]), float(force_components[5])])
+                ref_forces.append(np.linalg.norm(ref_F))
+                mace_forces.append(np.linalg.norm(mace_F))
+                force_diffs.append(np.linalg.norm(ref_F - mace_F))
 
     lower = min(np.min(ref_energies), np.min(mace_energies))
     upper = max(np.max(ref_energies), np.max(mace_energies))
@@ -74,6 +72,13 @@ for i, filename in enumerate(INPUT_FILES):
     axes[1][i].set_title(f'Force ({filename.split('.')[0]})')
     axes[1][i].set_xlabel(r'Ref. force ($eV/\AA$)')
     axes[1][i].set_ylabel(r'MACE force ($eV/\AA$)')
+
+    k = int(0.95 * len(force_diffs))
+    cutoff = np.partition(force_diffs, k)[k]
+    axes[2][i].hist(force_diffs, bins=30, range=(0, cutoff))
+    axes[2][i].set_title(f'Distribution of force diffs from ref. ({filename.split('.')[0]})')
+    axes[2][i].set_xlabel(r'Force diff ($eV/\AA$)')
+    axes[2][i].set_ylabel('Count')
 
 plt.show()
 

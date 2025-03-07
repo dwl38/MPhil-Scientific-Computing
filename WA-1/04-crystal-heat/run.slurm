@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH -J crystal-rtp
+#SBATCH -J heat-crystal
 #SBATCH -A NIKIFORAKIS-LIM-SL2-GPU
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
-#SBATCH --time=15:00:00
+#SBATCH --time=08:00:00
 #SBATCH --mail-type=NONE
 
 #SBATCH -p ampere
@@ -16,5 +16,4 @@ module load rhel8/default-amp              # REQUIRED - loads the basic environm
 
 source ../00-common/venv/bin/activate
 
-python run.py
-
+python run.py 300 303.15 0.5 1000 100000

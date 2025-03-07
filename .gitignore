@@ -18,11 +18,14 @@ WA-1/*/md.traj
 WA-1/*/traj.xyz
 WA-1/*/*/md.traj
 WA-1/*/*/traj.xyz
+WA-1/*/*/heat.traj
+WA-1/*/*/equi.traj
 
-#############
-# Test runs #
-#############
+#############################
+# Archives, test runs, etc. #
+#############################
 
+WA-1/archive/*
 WA-2/test/*
 
 ###############
@@ -31,3 +34,8 @@ WA-2/test/*
 
 WA-2/*/checkpoints/*.pt
 
+##############
+# SLURM logs #
+##############
+
+*slurm-*.out

@@ -1,5 +1,5 @@
 #==================================================================================================
-# MD simulation at 300 K, 1 atm over 100 ps to demonstrate stability of solid crystal.
+# MD simulation at 300 K, 1 atm over 300 ps to demonstrate stability of solid crystal.
 #==================================================================================================
 
 import sys
@@ -16,21 +16,28 @@ from ase.md import MDLogger
 from ase.md.npt import NPT
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase import units
+from torch.cuda import is_available as cuda_available
 
 #==================================================================================================
 # Modify parameters here
 
-N_STEPS = 100000
+N_STEPS = 300000
 TIMESTEP = 1 * units.fs
 START_FILE = 'start.xyz'
+
+TTIME = 25 * units.fs
+BULK_MODULUS = 100 * units.GPa
+PTIME = 75 * units.fs
+PFACTOR = PTIME * PTIME * BULK_MODULUS
 
 MACE_MODEL = '../00-common/mace-models/MACE-OFF24_medium.model'
 
 #==================================================================================================
 # Script
 
-print('Loading MACE-MP-0 model...')
-calculator = MACECalculator(model_paths=MACE_MODEL, device='cuda', enable_cueq=True)
+DEVICE = 'cuda' if cuda_available() else 'cpu'
+print(f'Loading MACE calculator on "{DEVICE}"...')
+calculator = MACECalculator(model_paths=MACE_MODEL, device=DEVICE, enable_cueq=True)
 atoms = ase.io.read(START_FILE)
 atoms.calc = calculator
 
@@ -38,7 +45,7 @@ print('Starting MD...')
 time_start = time.time()
 MaxwellBoltzmannDistribution(atoms, temperature_K=300)
 dyn = NPT(atoms, timestep=TIMESTEP, temperature_K=300, externalstress=1.01325 * units.bar,
-          ttime=25 * units.fs, pfactor=((75 * units.fs)**2) * (100 * units.GPa))
+          ttime=TTIME, pfactor=PFACTOR)
 dyn.attach(MDLogger(dyn, atoms, 'md.log', header=True, stress=True, peratom=True, mode='w'),
            interval=100)
 dyn.attach(ase.io.Trajectory('md.traj', 'w', atoms).write, interval=10)

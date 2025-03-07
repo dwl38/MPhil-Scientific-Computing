@@ -4,7 +4,7 @@
 # Python script for analyzing a trajectory, and identifiying the molecular species present in each
 # frame. Call this script using the following syntax:
 #
-#     python analyze.py <dirname>
+#     python analyze-comp.py <dirname>
 #
 # where the dirname can be "./" to run within current directory. This script then attempts to open
 # a file named "md.traj" within the working directory (presuming it to be an ASE trajectory file),
@@ -15,7 +15,6 @@
 #
 # Internally, the script represents molecules using a graph-theoretic representation, with
 # abbreviated labels for common substructures.
-#
 #==================================================================================================
 
 import sys
@@ -53,7 +52,7 @@ MOLECULES_TO_FIND = [[[6, 6, 6, 6], r'TATB', 'TATB'],       # TATB, C6H6O6N6
 #==================================================================================================
 
 # Parse input arguments
-parser = argparse.ArgumentParser(prog='analyze.py')
+parser = argparse.ArgumentParser(prog='analyze-comp.py')
 parser.add_argument('dirname', default='./')
 parser.add_argument('--traj', default='md.traj')
 parser.add_argument('-o', '--output', default='compositions.png')
@@ -69,7 +68,7 @@ if not os.path.isfile(args.traj):
     sys.exit()
 if os.path.isfile(args.output):
     os.remove(args.output)
-print(f'found {args.traj}, writing to {args.output}...')
+print(f'found "{args.traj}", writing to "{args.output}"...')
 
 # Filter only desired molecules
 if args.filter is not None:

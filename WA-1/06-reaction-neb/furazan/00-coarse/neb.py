@@ -31,7 +31,7 @@ ANCHOR_FILES = ['start.xyz', 'anchor_1.xyz', 'anchor_2.xyz', 'anchor_3.xyz',
 OPT_DIR = 'opt'
 OUTPUT_DIR = 'results'
 
-MACE_MODEL = '../../00-common/mace-models/MACE-OFF24_medium.model'
+MACE_MODEL = '../../../00-common/mace-models/MACE-OFF24_medium.model'
 
 #==================================================================================================
 # Housekeeping for program launch

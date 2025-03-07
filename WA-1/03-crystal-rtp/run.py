@@ -1,5 +1,5 @@
 #==================================================================================================
-# MD simulation at 300 K, 1 atm over 300 ps to demonstrate stability of solid crystal.
+# MD simulation at 300 K, 1 atm over 500 ps to demonstrate stability of solid crystal.
 #==================================================================================================
 
 import sys
@@ -21,7 +21,7 @@ from torch.cuda import is_available as cuda_available
 #==================================================================================================
 # Modify parameters here
 
-N_STEPS = 300000
+N_STEPS = 500000
 TIMESTEP = 1 * units.fs
 START_FILE = 'start.xyz'
 

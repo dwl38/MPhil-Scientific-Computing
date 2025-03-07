@@ -24,14 +24,13 @@ from copy import deepcopy
 #==================================================================================================
 # Modify parameters here
 
-MAX_IMAGES = 20
+MAX_IMAGES = 10
 
-ANCHOR_FILES = ['start.xyz', 'anchor_1.xyz', 'anchor_2.xyz', 'anchor_3.xyz',
-                'anchor_4.xyz', 'anchor_5.xyz', 'anchor_6.xyz', 'end.xyz']
+ANCHOR_FILES = ['start.xyz', 'anchor_1.xyz', 'anchor_2.xyz', 'end.xyz']
 OPT_DIR = 'opt'
 OUTPUT_DIR = 'results'
 
-MACE_MODEL = '../../00-common/mace-models/MACE-OFF24_medium.model'
+MACE_MODEL = '../../../00-common/mace-models/MACE-OFF24_medium.model'
 
 #==================================================================================================
 # Housekeeping for program launch
@@ -105,7 +104,7 @@ if not prev_opt_done:
 
 print('Setting up interpolated states...')
 interp, images = add_intermediate_images(anchors, 1e-10, max_number=MAX_IMAGES)
-for atoms in images[1:-1]:
+for atoms in images:
     atoms.calc = deepcopy(calculator)
 ase.io.write(os.path.join(OUTPUT_DIR, 'interp.xyz'), images)
 

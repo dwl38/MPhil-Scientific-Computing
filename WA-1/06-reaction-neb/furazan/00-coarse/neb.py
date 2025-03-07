@@ -105,7 +105,7 @@ if not prev_opt_done:
 
 print('Setting up interpolated states...')
 interp, images = add_intermediate_images(anchors, 1e-10, max_number=MAX_IMAGES)
-for atoms in images[1:-1]:
+for atoms in images:
     atoms.calc = deepcopy(calculator)
 ase.io.write(os.path.join(OUTPUT_DIR, 'interp.xyz'), images)
 

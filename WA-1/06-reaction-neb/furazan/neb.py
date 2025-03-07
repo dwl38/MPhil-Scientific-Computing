@@ -73,7 +73,7 @@ def add_intermediate_images(anchors, dist_cutoff, interpolate_method='idpp', max
 # Run NEB
 
 print('Loading MACE-MP-0 model...')
-calculator = MACECalculator(model_paths=MACE_MODEL, device='cpu', enable_cueq=True)
+calculator = MACECalculator(model_paths=MACE_MODEL, device=DEVICE, enable_cueq=True)
 
 print('Loading and optimizing anchor states...')
 anchors = []

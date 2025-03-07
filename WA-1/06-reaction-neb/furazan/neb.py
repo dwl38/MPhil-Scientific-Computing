@@ -124,8 +124,10 @@ fig, axis = plt.subplots()
 fig.set_size_inches(12, 9)
 nt = NEBTools(images)
 nt.plot_band(axis)
-nt.plot_bands(label=os.path.join(OUTPUT_DIR, 'nebplots'))
 fig.savefig(os.path.join(OUTPUT_DIR, 'pathway.png'), dpi=fig.dpi)
+
+nt = NEBTools(ase.io.read(os.path.join(OUTPUT_DIR, 'neb.traj'), ':'))
+nt.plot_bands(label=os.path.join(OUTPUT_DIR, 'nebplots'))
 
 #==================================================================================================
 # Housekeeping for program end

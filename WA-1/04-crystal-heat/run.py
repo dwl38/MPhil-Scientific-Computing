@@ -8,6 +8,7 @@ import sys
 import os
 import shutil
 import time
+import numpy as np
 import ase.io
 
 # To suppress warnings from PyTorch coming in through MACE
@@ -73,7 +74,8 @@ if steps_per_degree > 0:
                header=True, stress=True, peratom=True, mode='w'), interval=100)
     dyn.attach(ase.io.Trajectory(os.path.join(end_folder, 'heat.traj'), 'w', atoms).write,
                interval=10)
-    for t in range(start_temp, end_temp + temp_incre, temp_incre):
+    n_steps = int((end_temp - start_temp) / temp_incre) + 1
+    for t in np.linspace(start_temp, end_temp, n_steps):
         print(f'    Progress: running {t}K...')
         dyn.set_temperature(temperature_K=t)
         dyn.run(steps_per_degree)

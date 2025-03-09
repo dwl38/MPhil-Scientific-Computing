@@ -14,10 +14,6 @@ color change rgb 7 0.000000 0.730000 0.000000
 color change rgb 6 0.750000 0.750000 0.750000
 color change rgb 2 0.510000 0.510000 0.510000
 
-# Ensure wrapping at periodic boundary conditions
-pbc set {13.9116 13.9116 13.9116} -all
-pbc wrap all
-
 # Delete default "lines" representation
 mol delrep 0 top
 

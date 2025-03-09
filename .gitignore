@@ -21,6 +21,7 @@ WA-1/*/*/traj.xyz
 WA-1/*/*/heat.traj
 WA-1/*/*/equi.traj
 WA-2/eval/water-md/*/md.traj
+WA-2/eval/water-md/*/traj.xyz
 
 #############################
 # Archives, test runs, etc. #

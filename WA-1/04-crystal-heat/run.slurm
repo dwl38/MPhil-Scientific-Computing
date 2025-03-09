@@ -16,4 +16,4 @@ module load rhel8/default-amp              # REQUIRED - loads the basic environm
 
 source ../00-common/venv/bin/activate
 
-python run.py 303.15 308.15 0.5 1000 100000
+python run.py 317.15 327.15 0.5 1000 100000

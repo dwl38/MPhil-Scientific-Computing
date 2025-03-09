@@ -16,6 +16,6 @@ module load rhel8/default-amp              # REQUIRED - loads the basic environm
 
 source ../../venv/bin/activate
 
-python run.py --name='scratch' --model='../../scratch/model_scratch.model'
-python analyze.py scratch --index='-1000:'
+python run.py --name='finetune_multihead' --model='../../finetune_multihead/model_finetune_multihead.model'
+python analyze.py finetune_multihead --index='-1000:'
 

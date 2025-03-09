@@ -23,7 +23,7 @@ from torch.cuda import is_available as cuda_available
 #==================================================================================================
 # Modify parameters here
 
-N_STEPS = 500000
+N_STEPS = 200000
 TIMESTEP = 1 * units.fs
 
 TTIME = 25 * units.fs

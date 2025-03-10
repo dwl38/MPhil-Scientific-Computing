@@ -15,7 +15,7 @@ if not sys.warnoptions:
 
 from mace.calculators import MACECalculator
 from ase.md import MDLogger
-from ase.md.npt import NPT
+from ase.md.langevin import Langevin
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase import units
 from torch.cuda import is_available as cuda_available
@@ -24,12 +24,8 @@ from torch.cuda import is_available as cuda_available
 # Modify parameters here
 
 N_STEPS = 200000
+TRAJ_INTERVAL = 100
 TIMESTEP = 1 * units.fs
-
-TTIME = 25 * units.fs
-BULK_MODULUS = 2.2 * units.GPa
-PTIME = 75 * units.fs
-PFACTOR = PTIME * PTIME * BULK_MODULUS
 
 #==================================================================================================
 # Script
@@ -55,11 +51,10 @@ atoms.calc = calculator
 print('Starting MD...')
 time_start = time.time()
 MaxwellBoltzmannDistribution(atoms, temperature_K=300)
-dyn = NPT(atoms, timestep=TIMESTEP, temperature_K=300, externalstress=1.01325 * units.bar,
-          ttime=TTIME, pfactor=PFACTOR)
-dyn.attach(MDLogger(dyn, atoms, os.path.join(args.name, 'md.log'), header=True, stress=True,
+dyn = Langevin(atoms, timestep=TIMESTEP, temperature_K=300, friction=(0.01/TIMESTEP))
+dyn.attach(MDLogger(dyn, atoms, os.path.join(args.name, 'md.log'), header=True, stress=False,
                     peratom=True, mode='w'), interval=100)
-dyn.attach(ase.io.Trajectory(os.path.join(args.name, 'md.traj'), 'w', atoms).write, interval=100)
+dyn.attach(ase.io.Trajectory(os.path.join(args.name, 'md.traj'), 'w', atoms).write, interval=TRAJ_INTERVAL)
 
 print('Running MD...')
 for i in range(20):

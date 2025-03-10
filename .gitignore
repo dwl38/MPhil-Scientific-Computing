@@ -29,6 +29,7 @@ WA-2/eval/water-md/*/traj.xyz
 
 WA-1/archive/*
 WA-2/test/*
+WA-2/eval/archive/*
 
 ###############
 # Checkpoints #

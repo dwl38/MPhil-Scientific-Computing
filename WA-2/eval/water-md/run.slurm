@@ -16,6 +16,7 @@ module load rhel8/default-amp              # REQUIRED - loads the basic environm
 
 source ../../venv/bin/activate
 
-python run.py --name='finetune_multihead' --model='../../finetune_multihead/model_finetune_multihead.model'
-python analyze.py finetune_multihead --index='-1000:'
+#python run.py --name='finetune_multihead' --model='../../finetune_multihead/model_finetune_multihead.model'
+python run.py --name='mp0' --model='../../../WA-1/00-common/mace-models/2023-12-03-mace-128-L1_epoch-199.model'
+python analyze.py mp0 --index='-1000:'
 
